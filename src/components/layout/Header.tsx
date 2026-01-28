@@ -76,11 +76,11 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <Image
-            src="/images/logo-transparent.png"
+            src="/images/logo.png"
             alt="Cash Glitch"
             width={48}
             height={48}
-            className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
+            className="w-10 h-10 object-cover rounded-lg drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
             priority
           />
           <span className="text-lg font-matrix tracking-wider text-glow hidden sm:inline">
@@ -117,11 +117,11 @@ export function Header() {
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2 text-primary font-matrix text-glow">
                 <Image
-                  src="/images/logo-transparent.png"
+                  src="/images/logo.png"
                   alt="Cash Glitch"
                   width={32}
                   height={32}
-                  className="object-contain"
+                  className="w-8 h-8 object-cover rounded-md"
                 />
                 CASHGLITCH
               </SheetTitle>
