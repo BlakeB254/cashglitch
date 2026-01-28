@@ -105,31 +105,31 @@ export default function Home() {
           <div className="relative group cursor-pointer w-full max-w-xs mx-auto h-48 md:h-56 flex items-center justify-center mt-8">
             <div className="relative w-full h-full flex items-center justify-center glitch-image-container">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-20 animate-pulse" />
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 blur-xl rounded-full opacity-30 animate-pulse" />
               {/* Main logo */}
               <Image
                 alt="Cash Glitch"
-                className="w-auto h-full max-h-full object-contain drop-shadow-[0_0_25px_rgba(0,255,65,0.6)] glitch-main"
-                src="/images/icon.jpg"
-                width={200}
-                height={200}
+                className="w-auto h-full max-h-full object-contain drop-shadow-[0_0_25px_rgba(168,85,247,0.6)] glitch-main"
+                src="/images/logo.png"
+                width={400}
+                height={400}
                 priority
               />
-              {/* Red glitch layer */}
+              {/* Pink glitch layer */}
               <Image
                 alt=""
                 className="w-auto h-full max-h-full object-contain absolute inset-0 glitch-red"
-                src="/images/icon.jpg"
-                width={200}
-                height={200}
+                src="/images/logo.png"
+                width={400}
+                height={400}
               />
-              {/* Blue glitch layer */}
+              {/* Cyan glitch layer */}
               <Image
                 alt=""
                 className="w-auto h-full max-h-full object-contain absolute inset-0 glitch-blue"
-                src="/images/icon.jpg"
-                width={200}
-                height={200}
+                src="/images/logo.png"
+                width={400}
+                height={400}
               />
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function Home() {
 
             {/* CTA Button */}
             <Link href="/giveaway" className="relative w-full group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-emerald-600 rounded opacity-75 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded opacity-75 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
               <button className="relative w-full bg-black text-primary border border-primary font-bold py-6 px-12 text-xl md:text-2xl uppercase tracking-widest hover:text-black hover:bg-primary transition-all duration-300 flex items-center justify-center gap-4 font-matrix">
                 INITIATE RESOURCE SCAN
                 <Zap className="w-6 h-6" />

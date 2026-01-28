@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.json",
-  themeColor: "#00ff41",
+  themeColor: "#a855f7",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -104,7 +104,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${geistMono.variable} antialiased bg-black text-primary min-h-screen`}>
+      <body className={`${geistMono.variable} antialiased bg-[#0f0a1a] text-primary min-h-screen`}>
         <MatrixRain />
         <Header />
         <div className="relative z-20">{children}</div>

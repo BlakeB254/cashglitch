@@ -34,14 +34,20 @@ export function MatrixRain() {
       drops[i] = Math.random() * -100;
     }
 
+    // Purple/pink color palette
+    const colors = [
+      { r: 168, g: 85, b: 247 },  // Purple #a855f7
+      { r: 236, g: 72, b: 153 },  // Pink #ec4899
+      { r: 139, g: 92, b: 246 },  // Violet #8b5cf6
+      { r: 196, g: 181, b: 253 }, // Lavender #c4b5fd
+    ];
+
     // Drawing function
     const draw = () => {
-      // Semi-transparent black to create trail effect
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      // Semi-transparent dark purple to create trail effect
+      ctx.fillStyle = "rgba(15, 10, 26, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Green text
-      ctx.fillStyle = "#00ff41";
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
@@ -52,13 +58,17 @@ export function MatrixRain() {
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
-        // Draw the character
-        ctx.fillStyle = `rgba(0, 255, 65, ${Math.random() * 0.5 + 0.5})`;
+        // Pick a random color from the palette
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const alpha = Math.random() * 0.5 + 0.5;
+
+        // Draw the character with purple/pink color
+        ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
         ctx.fillText(char, x, y);
 
-        // Brighter leading character
+        // Brighter leading character (white/pink glow)
         if (Math.random() > 0.98) {
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = "#f0abfc";
           ctx.fillText(char, x, y);
         }
 

@@ -73,7 +73,7 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-primary/30">
+    <header className="fixed top-0 z-50 w-full bg-[#0f0a1a]/80 backdrop-blur-md border-b border-primary/30">
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
@@ -109,7 +109,7 @@ export function Header() {
           </SheetTrigger>
           <SheetContent
             side="right"
-            className="w-80 bg-black border-l border-primary/30"
+            className="w-80 bg-[#0f0a1a] border-l border-primary/30"
           >
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2 text-primary font-matrix text-glow">
