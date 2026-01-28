@@ -19,8 +19,6 @@ import {
   Handshake,
   Laptop,
   Monitor,
-  DollarSign,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -77,10 +75,15 @@ export function Header() {
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative w-8 h-8">
-            <DollarSign className="w-8 h-8 text-primary glitch-main" />
-          </div>
-          <span className="text-lg font-matrix tracking-wider text-glow">
+          <Image
+            src="/images/logo-transparent.png"
+            alt="Cash Glitch"
+            width={48}
+            height={48}
+            className="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
+            priority
+          />
+          <span className="text-lg font-matrix tracking-wider text-glow hidden sm:inline">
             CASH<span className="text-primary">GLITCH</span>
           </span>
         </Link>
@@ -113,7 +116,13 @@ export function Header() {
           >
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2 text-primary font-matrix text-glow">
-                <DollarSign className="h-5 w-5" />
+                <Image
+                  src="/images/logo-transparent.png"
+                  alt="Cash Glitch"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
                 CASHGLITCH
               </SheetTitle>
             </SheetHeader>

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import {
   Heart,
   Gift,
@@ -11,11 +10,7 @@ import {
   Handshake,
   Laptop,
   Monitor,
-  TrendingUp,
   ExternalLink,
-  Users,
-  DollarSign,
-  Zap,
 } from "lucide-react";
 
 const categories = [
@@ -64,34 +59,6 @@ const categories = [
 ];
 
 export default function Home() {
-  const [resourceCount, setResourceCount] = useState(0);
-  const [livesImpacted, setLivesImpacted] = useState(0);
-
-  // Animated counter effect
-  useEffect(() => {
-    const targetResources = 2847;
-    const targetLives = 15420;
-    const duration = 2000;
-    const steps = 60;
-    const interval = duration / steps;
-
-    let currentStep = 0;
-    const timer = setInterval(() => {
-      currentStep++;
-      const progress = currentStep / steps;
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-
-      setResourceCount(Math.floor(targetResources * easeOut));
-      setLivesImpacted(Math.floor(targetLives * easeOut));
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-      }
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="min-h-screen text-primary relative overflow-x-hidden">
       {/* CRT Overlay */}
@@ -110,7 +77,7 @@ export default function Home() {
               <Image
                 alt="Cash Glitch"
                 className="w-auto h-full max-h-full object-contain drop-shadow-[0_0_25px_rgba(168,85,247,0.6)] glitch-main"
-                src="/images/logo.png"
+                src="/images/logo-transparent.png"
                 width={400}
                 height={400}
                 priority
@@ -119,7 +86,7 @@ export default function Home() {
               <Image
                 alt=""
                 className="w-auto h-full max-h-full object-contain absolute inset-0 glitch-red"
-                src="/images/logo.png"
+                src="/images/logo-transparent.png"
                 width={400}
                 height={400}
               />
@@ -127,7 +94,7 @@ export default function Home() {
               <Image
                 alt=""
                 className="w-auto h-full max-h-full object-contain absolute inset-0 glitch-blue"
-                src="/images/logo.png"
+                src="/images/logo-transparent.png"
                 width={400}
                 height={400}
               />
@@ -138,50 +105,6 @@ export default function Home() {
           <p className="mt-8 text-xl md:text-2xl text-primary/80 tracking-widest font-matrix animate-pulse">
             THE SYSTEM IS BROKEN. FIX IT.
           </p>
-        </div>
-
-        {/* Stats Panel */}
-        <div className="w-full max-w-3xl bg-black/90 border border-primary p-1 backdrop-blur-md mb-12 box-glow">
-          <div className="border border-primary/30 p-8 flex flex-col items-center gap-8 relative overflow-hidden">
-            {/* Scanning line */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-primary/30 animate-scan" />
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-              {/* Resources Listed */}
-              <div className="bg-black/50 border border-primary/20 p-6 flex flex-col items-center text-center hover:border-primary/60 transition-colors group cursor-pointer">
-                <TrendingUp className="w-8 h-8 mb-2 group-hover:text-white transition-colors" />
-                <h3 className="text-sm text-primary/60 mb-1">RESOURCES LISTED</h3>
-                <span className="text-3xl md:text-4xl font-matrix text-glow">
-                  {resourceCount.toLocaleString()}
-                </span>
-                <span className="text-xs text-primary/40 mt-2">
-                  Grants, jobs & opportunities
-                </span>
-              </div>
-
-              {/* Lives Impacted */}
-              <div className="bg-black/50 border border-primary/20 p-6 flex flex-col items-center text-center hover:border-primary/60 transition-colors group cursor-pointer">
-                <Users className="w-8 h-8 mb-2 group-hover:text-white transition-colors" />
-                <h3 className="text-sm text-primary/60 mb-1">LIVES IMPACTED</h3>
-                <span className="text-3xl md:text-4xl font-matrix text-glow">
-                  {livesImpacted.toLocaleString()}
-                </span>
-                <span className="text-xs text-primary/40 mt-2">
-                  Community members helped
-                </span>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <Link href="/giveaway" className="relative w-full group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded opacity-75 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-              <button className="relative w-full bg-black text-primary border border-primary font-bold py-6 px-12 text-xl md:text-2xl uppercase tracking-widest hover:text-black hover:bg-primary transition-all duration-300 flex items-center justify-center gap-4 font-matrix">
-                INITIATE RESOURCE SCAN
-                <Zap className="w-6 h-6" />
-              </button>
-            </Link>
-          </div>
         </div>
 
         {/* Categories Grid */}
