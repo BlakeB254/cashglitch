@@ -33,7 +33,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-primary/60 leading-relaxed font-tech">
-              The system is broken. We help you fix the glitches to unlock
+              Organizing a broken system. We help you fix the glitches to unlock
               abundance, resources, and opportunities.
             </p>
             <div className="flex items-center gap-2 text-sm text-primary/60">

@@ -1,7 +1,7 @@
 {
   "name": "CashGlitch",
   "short_name": "CashGlitch",
-  "description": "The System is Broken. Exploit It. Unlock free resources, grants, and opportunities.",
+  "description": "Organizing a broken system. Unlock free resources, grants, and opportunities.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f0a1a",

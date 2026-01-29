@@ -103,7 +103,7 @@ export default function Home() {
 
           {/* Tagline */}
           <p className="mt-8 text-xl md:text-2xl text-primary/80 tracking-widest font-matrix animate-pulse">
-            THE SYSTEM IS BROKEN. FIX IT.
+            Organizing a broken system. Let&apos;s fix it.
           </p>
         </div>
 
