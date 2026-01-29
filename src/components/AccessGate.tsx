@@ -10,6 +10,8 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
   const [step, setStep] = useState<Step>("question");
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userResponse, setUserResponse] = useState<"yes" | "no" | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if user already has access
@@ -17,8 +19,8 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
     setHasAccess(access === "granted");
   }, []);
 
-  const handleQuestionResponse = () => {
-    // Regardless of yes or no, proceed to email step
+  const handleQuestionResponse = (response: "yes" | "no") => {
+    setUserResponse(response);
     setStep("email");
   };
 
@@ -27,15 +29,31 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
     if (!email.trim()) return;
 
     setIsSubmitting(true);
+    setError(null);
 
-    // Store email in localStorage (in production, you'd send this to an API)
-    localStorage.setItem("cashglitch_email", email);
-    localStorage.setItem("cashglitch_access", "granted");
+    try {
+      // Send to API
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          response: userResponse,
+        }),
+      });
 
-    // Brief delay for visual feedback
-    await new Promise((resolve) => setTimeout(resolve, 500));
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to subscribe");
+      }
 
-    setHasAccess(true);
+      // Grant access
+      localStorage.setItem("cashglitch_access", "granted");
+      setHasAccess(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setIsSubmitting(false);
+    }
   };
 
   // Show nothing while checking access status
@@ -84,13 +102,13 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
               {/* Yes/No Buttons */}
               <div className="flex gap-4 w-full max-w-xs">
                 <button
-                  onClick={handleQuestionResponse}
+                  onClick={() => handleQuestionResponse("yes")}
                   className="flex-1 py-3 px-6 bg-primary/10 border border-primary/40 text-primary font-tech text-lg tracking-wider hover:bg-primary/20 hover:border-primary/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300"
                 >
                   YES
                 </button>
                 <button
-                  onClick={handleQuestionResponse}
+                  onClick={() => handleQuestionResponse("no")}
                   className="flex-1 py-3 px-6 bg-pink-500/10 border border-pink-500/40 text-pink-400 font-tech text-lg tracking-wider hover:bg-pink-500/20 hover:border-pink-500/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all duration-300"
                 >
                   NO
@@ -118,6 +136,11 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
                     autoFocus
                     className="w-full py-3 px-4 bg-primary/5 border border-primary/30 text-primary font-tech placeholder:text-primary/30 focus:outline-none focus:border-primary/60 focus:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-300"
                   />
+                  {error && (
+                    <p className="mt-2 text-pink-400 text-xs font-tech">
+                      ERROR: {error}
+                    </p>
+                  )}
                 </div>
                 <button
                   type="submit"
