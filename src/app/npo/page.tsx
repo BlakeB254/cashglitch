@@ -22,6 +22,12 @@ export const metadata: Metadata = {
   title: "Non-Profit Organizations",
   description:
     "Discover non-profit organizations driving reparations initiatives and creating systemic change in communities across the nation.",
+  keywords: ["reparations", "nonprofit organizations", "community development", "social justice", "equity initiatives", "systemic change"],
+  openGraph: {
+    title: "Non-Profit Organizations | CashGlitch",
+    description: "Discover non-profit organizations driving reparations initiatives and creating systemic change.",
+    images: ["/images/og-image.png"],
+  },
 };
 
 const organizations = [

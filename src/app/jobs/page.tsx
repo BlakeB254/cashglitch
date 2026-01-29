@@ -25,6 +25,12 @@ export const metadata: Metadata = {
   title: "Jobs & Career Opportunities",
   description:
     "Find employment opportunities with organizations committed to equity, diversity, and fair wages.",
+  keywords: ["jobs", "career opportunities", "remote work", "equity employers", "fair wages", "diversity hiring", "employment"],
+  openGraph: {
+    title: "Jobs & Career Opportunities | CashGlitch",
+    description: "Find employment opportunities with organizations committed to equity, diversity, and fair wages.",
+    images: ["/images/og-image.png"],
+  },
 };
 
 const jobListings = [

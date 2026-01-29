@@ -26,6 +26,12 @@ export const metadata: Metadata = {
   title: "Get a Free Computer",
   description:
     "Apply to receive a free refurbished computer for education, job searching, or career development.",
+  keywords: ["free computer", "refurbished laptop", "digital divide", "computer assistance", "free laptop", "technology access"],
+  openGraph: {
+    title: "Get a Free Computer | CashGlitch",
+    description: "Apply to receive a free refurbished computer for education, job searching, or career development.",
+    images: ["/images/og-image.png"],
+  },
 };
 
 const eligibilityCriteria = [

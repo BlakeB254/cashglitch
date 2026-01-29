@@ -25,6 +25,12 @@ export const metadata: Metadata = {
   title: "Free Travel Opportunities",
   description:
     "Explore travel programs, cultural exchanges, and opportunities to see the world at no cost.",
+  keywords: ["free travel", "cultural exchange", "study abroad", "travel scholarships", "Fulbright", "Peace Corps", "travel programs"],
+  openGraph: {
+    title: "Free Travel Opportunities | CashGlitch",
+    description: "Explore travel programs, cultural exchanges, and opportunities to see the world at no cost.",
+    images: ["/images/og-image.png"],
+  },
 };
 
 const travelPrograms = [

@@ -27,6 +27,12 @@ export const metadata: Metadata = {
   title: "Donate a Computer",
   description:
     "Bridge the digital divide by donating your used computers and devices. Your contribution empowers individuals with technology access.",
+  keywords: ["donate computer", "computer donation", "digital divide", "technology donation", "donate laptop", "recycle electronics"],
+  openGraph: {
+    title: "Donate a Computer | CashGlitch",
+    description: "Bridge the digital divide by donating your used computers and devices.",
+    images: ["/images/og-image.png"],
+  },
 };
 
 const acceptedDevices = [

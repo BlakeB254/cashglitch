@@ -26,6 +26,12 @@ export const metadata: Metadata = {
   title: "Giveaways & Free Resources",
   description:
     "Access free resources, grants, scholarships, and opportunities designed to build generational wealth and prosperity.",
+  keywords: ["free grants", "scholarships", "FAFSA", "Pell Grant", "housing assistance", "SNAP benefits", "free money", "financial aid"],
+  openGraph: {
+    title: "Giveaways & Free Resources | CashGlitch",
+    description: "Access free resources, grants, scholarships, and opportunities designed to build generational wealth.",
+    images: ["/images/og-image.png"],
+  },
 };
 
 const categories = [

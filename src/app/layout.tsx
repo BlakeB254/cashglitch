@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | CashGlitch",
   },
   description:
-    "CashGlitch connects you with free resources, grants, scholarships, reparations initiatives, and opportunities. Unlock abundance and exploit the system for generational wealth.",
+    "CashGlitch connects you with free resources, grants, scholarships, reparations initiatives, and opportunities. Unlock abundance and fix the system for generational wealth.",
   keywords: [
     "free money",
     "grants",
@@ -73,11 +73,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png" },
-      { url: "/images/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/images/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/images/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/favicon-16.png", sizes: "16x16", type: "image/png" },
     ],
     apple: [
-      { url: "/images/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/images/favicon-180.png", sizes: "180x180", type: "image/png" },
     ],
   },
   manifest: "/manifest.json",
