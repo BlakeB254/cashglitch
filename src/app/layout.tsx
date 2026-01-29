@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { MatrixRain } from "@/components/MatrixRain";
+import { AccessGate } from "@/components/AccessGate";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -105,9 +106,11 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistMono.variable} antialiased bg-[#0f0a1a] text-primary min-h-screen`}>
-        <MatrixRain />
-        <Header />
-        <div className="relative z-20">{children}</div>
+        <AccessGate>
+          <MatrixRain />
+          <Header />
+          <div className="relative z-20">{children}</div>
+        </AccessGate>
       </body>
     </html>
   );
