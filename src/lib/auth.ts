@@ -58,7 +58,7 @@ export async function createSession(email: string): Promise<string> {
   await initializeSessions();
 
   const sessionToken = generateToken();
-  const isAdmin = email.toLowerCase() === process.env.ADMIN_EMAIL?.toLowerCase();
+  const isAdmin = isAdminEmail(email);
   const expiresAt = new Date(Date.now() + AUTH_CONFIG.SESSION_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
 
   await sql`
@@ -135,5 +135,6 @@ export function getMagicLinkUrl(token: string): string {
 
 // Check if email is the admin email
 export function isAdminEmail(email: string): boolean {
-  return email.toLowerCase() === process.env.ADMIN_EMAIL?.toLowerCase();
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  return email.trim().toLowerCase() === adminEmail;
 }
