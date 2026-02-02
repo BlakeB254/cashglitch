@@ -22,8 +22,12 @@ export async function sendMagicLinkEmail(
   }
 
   try {
-    const { error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "CashGlitch <noreply@cashglitch.org>",
+    // Use Resend's test email if no custom domain is configured
+    // To use your own domain, verify it at https://resend.com/domains
+    const fromEmail = process.env.EMAIL_FROM || "CashGlitch <onboarding@resend.dev>";
+
+    const { data, error } = await resend.emails.send({
+      from: fromEmail,
       to: email,
       subject: "Your CashGlitch Access Link",
       html: `
@@ -115,6 +119,7 @@ If you didn't request this, you can safely ignore this email.
       return { success: false, error: error.message };
     }
 
+    console.log(`Magic link email sent successfully to ${email} (id: ${data?.id})`);
     return { success: true };
   } catch (err) {
     console.error("Error sending magic link email:", err);
