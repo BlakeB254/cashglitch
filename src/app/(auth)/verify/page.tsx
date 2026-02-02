@@ -14,6 +14,7 @@ function VerifyContent() {
   const [status, setStatus] = useState<"verifying" | "success" | "error">("verifying");
   const [error, setError] = useState<string | null>(null);
   const [redirecting, setRedirecting] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -37,11 +38,12 @@ function VerifyContent() {
         }
 
         setStatus("success");
+        setIsAdmin(data.isAdmin);
 
-        // Redirect after short delay
+        // Redirect after short delay - admin goes to /admin, others to home
         setRedirecting(true);
         setTimeout(() => {
-          router.push("/");
+          router.push(data.isAdmin ? "/admin" : "/");
         }, 2000);
       } catch (err) {
         setStatus("error");
@@ -89,14 +91,14 @@ function VerifyContent() {
           <>
             <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-6" />
             <h1 className="text-2xl font-matrix text-green-400 text-glow mb-2">
-              Access Granted
+              {isAdmin ? "Admin Access Granted" : "Access Granted"}
             </h1>
             <p className="text-primary/60 font-tech mb-4">
               You have been successfully authenticated.
             </p>
             {redirecting && (
               <p className="text-primary/40 text-sm font-tech animate-pulse">
-                Redirecting to the site...
+                {isAdmin ? "Redirecting to admin dashboard..." : "Redirecting to the site..."}
               </p>
             )}
           </>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyMagicLinkToken } from "@/lib/auth";
+import { verifyMagicLinkToken, isAdminEmail } from "@/lib/auth";
 import { setSessionCookie, grantAccess } from "@/lib/session";
 
 export async function POST(request: NextRequest) {
@@ -20,6 +20,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if user is admin
+    const isAdmin = isAdminEmail(result.email);
+
     // Create session and set cookie
     await setSessionCookie(result.email);
 
@@ -29,6 +32,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       email: result.email,
+      isAdmin,
     });
   } catch (error) {
     console.error("Token verification error:", error);
