@@ -4,6 +4,10 @@ import { getMagicLinkUrl } from "./auth";
 // Only initialize Resend if API key is present
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
+// Log Resend initialization status (redact actual key)
+console.log("[Email Init] RESEND_API_KEY present:", !!process.env.RESEND_API_KEY);
+console.log("[Email Init] Resend client initialized:", !!resend);
+
 export async function sendMagicLinkEmail(
   email: string,
   token: string
@@ -119,12 +123,16 @@ If you didn't request this, you can safely ignore this email.
       `.trim(),
     });
 
+    // Log full Resend response for debugging
+    console.log("[Email Response] data:", JSON.stringify(data));
+    console.log("[Email Response] error:", JSON.stringify(error));
+
     if (error) {
       console.error("Failed to send magic link email:", error);
       return { success: false, error: error.message };
     }
 
-    console.log(`Magic link email sent successfully to ${email} (id: ${data?.id})`);
+    console.log(`[Email Success] Magic link email sent to ${email} (id: ${data?.id})`);
     return { success: true };
   } catch (err) {
     console.error("Error sending magic link email:", err);
