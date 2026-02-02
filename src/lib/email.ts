@@ -23,11 +23,16 @@ export async function sendMagicLinkEmail(
 
   try {
     const fromEmail = process.env.EMAIL_FROM || "CashGlitch <onboarding@resend.dev>";
+    const replyTo = process.env.REPLY_TO_EMAIL || "support@cashglitch.org";
 
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: email,
-      subject: "Your CashGlitch Access Link",
+      reply_to: replyTo,
+      subject: "Your CashGlitch Sign-In Link",
+      headers: {
+        "X-Entity-Ref-ID": token.slice(0, 8),
+      },
       html: `
         <!DOCTYPE html>
         <html>
@@ -35,7 +40,7 @@ export async function sendMagicLinkEmail(
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
-        <body style="margin: 0; padding: 0; background-color: #0f0a1a; font-family: 'Courier New', monospace;">
+        <body style="margin: 0; padding: 0; background-color: #0f0a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
           <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0f0a1a; padding: 40px 20px;">
             <tr>
               <td align="center">
@@ -43,37 +48,36 @@ export async function sendMagicLinkEmail(
                   <!-- Header -->
                   <tr>
                     <td align="center" style="padding-bottom: 30px;">
-                      <h1 style="color: #a855f7; font-size: 32px; margin: 0; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">
-                        CASH GLITCH
+                      <h1 style="color: #a855f7; font-size: 28px; margin: 0; font-weight: 600;">
+                        CashGlitch
                       </h1>
-                      <p style="color: #c4b5fd; opacity: 0.6; font-size: 12px; margin-top: 8px;">
-                        // SYSTEM ACCESS REQUESTED
+                      <p style="color: #c4b5fd; opacity: 0.7; font-size: 13px; margin-top: 8px;">
+                        Sign-in request
                       </p>
                     </td>
                   </tr>
 
                   <!-- Main Content -->
                   <tr>
-                    <td style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); padding: 30px;">
-                      <p style="color: #c4b5fd; font-size: 14px; margin: 0 0 20px 0; line-height: 1.6;">
-                        &gt; ACCESS LINK GENERATED<br>
-                        &gt; VALID FOR 15 MINUTES<br>
-                        &gt; CLICK BELOW TO ENTER THE MATRIX
+                    <td style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 8px; padding: 30px;">
+                      <p style="color: #e9e4f0; font-size: 15px; margin: 0 0 20px 0; line-height: 1.6;">
+                        Hi there,<br><br>
+                        Click the button below to sign in to CashGlitch. This link will expire in 15 minutes.
                       </p>
 
                       <table width="100%" cellpadding="0" cellspacing="0">
                         <tr>
                           <td align="center" style="padding: 20px 0;">
                             <a href="${magicLinkUrl}"
-                               style="display: inline-block; background: linear-gradient(90deg, #9333ea, #ec4899); color: white; text-decoration: none; padding: 14px 32px; font-size: 16px; font-weight: bold; letter-spacing: 2px;">
-                              GRANT ACCESS
+                               style="display: inline-block; background: linear-gradient(90deg, #9333ea, #ec4899); color: white; text-decoration: none; padding: 14px 32px; font-size: 15px; font-weight: 600; border-radius: 6px;">
+                              Sign in to CashGlitch
                             </a>
                           </td>
                         </tr>
                       </table>
 
-                      <p style="color: #c4b5fd; opacity: 0.5; font-size: 12px; margin: 20px 0 0 0; line-height: 1.6;">
-                        If the button doesn't work, copy and paste this link:<br>
+                      <p style="color: #c4b5fd; opacity: 0.6; font-size: 12px; margin: 20px 0 0 0; line-height: 1.6;">
+                        If the button doesn't work, copy and paste this link into your browser:<br>
                         <span style="color: #a855f7; word-break: break-all;">${magicLinkUrl}</span>
                       </p>
                     </td>
@@ -82,12 +86,11 @@ export async function sendMagicLinkEmail(
                   <!-- Footer -->
                   <tr>
                     <td align="center" style="padding-top: 30px;">
-                      <p style="color: #c4b5fd; opacity: 0.4; font-size: 11px; margin: 0;">
-                        &gt; IF YOU DIDN'T REQUEST THIS, IGNORE THIS MESSAGE<br>
-                        &gt; THE SYSTEM WILL RESET AUTOMATICALLY
+                      <p style="color: #c4b5fd; opacity: 0.5; font-size: 12px; margin: 0; line-height: 1.6;">
+                        If you didn't request this email, you can safely ignore it.
                       </p>
-                      <p style="color: #c4b5fd; opacity: 0.3; font-size: 10px; margin-top: 20px;">
-                        © 2025 CASH GLITCH. TAKE THE ABUNDANCE PILL.
+                      <p style="color: #c4b5fd; opacity: 0.4; font-size: 11px; margin-top: 16px;">
+                        © ${new Date().getFullYear()} CashGlitch
                       </p>
                     </td>
                   </tr>
@@ -98,17 +101,16 @@ export async function sendMagicLinkEmail(
         </body>
         </html>
       `,
-      text: `
-CASH GLITCH - ACCESS LINK
+      text: `CashGlitch Sign-In Link
 
-Click the link below to access CashGlitch:
+Click the link below to sign in to CashGlitch:
 ${magicLinkUrl}
 
 This link expires in 15 minutes.
 
-If you didn't request this, you can safely ignore this email.
+If you didn't request this email, you can safely ignore it.
 
-© 2025 CASH GLITCH
+© ${new Date().getFullYear()} CashGlitch
       `.trim(),
     });
 
