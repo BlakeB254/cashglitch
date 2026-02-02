@@ -26,6 +26,11 @@ export async function sendMagicLinkEmail(
     // To use your own domain, verify it at https://resend.com/domains
     const fromEmail = process.env.EMAIL_FROM || "CashGlitch <onboarding@resend.dev>";
 
+    // Debug logging for email configuration
+    console.log("[Email Config] EMAIL_FROM env var:", process.env.EMAIL_FROM);
+    console.log("[Email Config] Using fromEmail:", fromEmail);
+    console.log("[Email Config] Magic link URL:", magicLinkUrl);
+
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: email,

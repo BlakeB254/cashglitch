@@ -115,6 +115,12 @@ export function getMagicLinkUrl(token: string): string {
   // Priority: APP_URL > NEXT_PUBLIC_APP_URL > VERCEL_URL > localhost
   let baseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL;
 
+  // Debug logging for URL configuration
+  console.log("[Auth Config] APP_URL:", process.env.APP_URL);
+  console.log("[Auth Config] NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+  console.log("[Auth Config] VERCEL_URL:", process.env.VERCEL_URL);
+  console.log("[Auth Config] VERCEL_PROJECT_PRODUCTION_URL:", process.env.VERCEL_PROJECT_PRODUCTION_URL);
+
   if (!baseUrl && process.env.VERCEL_URL) {
     // Vercel provides VERCEL_URL automatically (without protocol)
     baseUrl = `https://${process.env.VERCEL_URL}`;
