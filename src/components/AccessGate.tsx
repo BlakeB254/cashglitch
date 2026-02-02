@@ -38,7 +38,7 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
     }
 
     const initialize = async () => {
-      // Check access status from server
+      // Check access status from server (magic link verified session)
       try {
         const sessionRes = await fetch("/api/auth/session");
         const sessionData = await sessionRes.json();
@@ -48,12 +48,15 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
           return;
         }
       } catch {
-        // Check localStorage as fallback
-        const localAccess = localStorage.getItem("cashglitch_access");
-        if (localAccess === "granted") {
-          setHasAccess(true);
-          return;
-        }
+        // Server check failed, continue to show gate
+      }
+
+      // Check sessionStorage for users who skipped email (current browser session only)
+      // This does NOT persist across browser sessions - only localStorage grants permanent access
+      const sessionAccess = sessionStorage.getItem("cashglitch_session_access");
+      if (sessionAccess === "granted") {
+        setHasAccess(true);
+        return;
       }
 
       // Fetch intro screens
@@ -112,8 +115,10 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
   };
 
   const handleSkipEmail = () => {
-    // Grant access without email - just set localStorage for now
-    localStorage.setItem("cashglitch_access", "granted");
+    // Grant access for current browser session only (not permanent)
+    // Users who skip will see the gate again when they close/reopen the browser
+    // Only magic link verification grants permanent access
+    sessionStorage.setItem("cashglitch_session_access", "granted");
     setHasAccess(true);
   };
 

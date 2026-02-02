@@ -1,13 +1,13 @@
 import Stripe from "stripe";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY environment variable is not set");
-}
-
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2026-01-28.clover",
-  typescript: true,
-});
+// Stripe is optional - only initialize if key is present
+// This allows builds to succeed without STRIPE_SECRET_KEY
+export const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2026-01-28.clover",
+      typescript: true,
+    })
+  : null;
 
 // Predefined donation amounts in cents
 export const DONATION_AMOUNTS = [

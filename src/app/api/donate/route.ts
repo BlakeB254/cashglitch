@@ -3,6 +3,14 @@ import { stripe, DEFAULT_DONATION_AMOUNT, DONATION_AMOUNTS } from "@/lib/stripe"
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Stripe is configured
+    if (!stripe) {
+      return NextResponse.json(
+        { error: "Stripe is not configured. Please set STRIPE_SECRET_KEY." },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { amount, customAmount } = body;
 
