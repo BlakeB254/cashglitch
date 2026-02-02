@@ -4,10 +4,6 @@ import { getMagicLinkUrl } from "./auth";
 // Only initialize Resend if API key is present
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-// Log Resend initialization status (redact actual key)
-console.log("[Email Init] RESEND_API_KEY present:", !!process.env.RESEND_API_KEY);
-console.log("[Email Init] Resend client initialized:", !!resend);
-
 export async function sendMagicLinkEmail(
   email: string,
   token: string
@@ -26,14 +22,7 @@ export async function sendMagicLinkEmail(
   }
 
   try {
-    // Use Resend's test email if no custom domain is configured
-    // To use your own domain, verify it at https://resend.com/domains
     const fromEmail = process.env.EMAIL_FROM || "CashGlitch <onboarding@resend.dev>";
-
-    // Debug logging for email configuration
-    console.log("[Email Config] EMAIL_FROM env var:", process.env.EMAIL_FROM);
-    console.log("[Email Config] Using fromEmail:", fromEmail);
-    console.log("[Email Config] Magic link URL:", magicLinkUrl);
 
     const { data, error } = await resend.emails.send({
       from: fromEmail,
@@ -123,16 +112,10 @@ If you didn't request this, you can safely ignore this email.
       `.trim(),
     });
 
-    // Log full Resend response for debugging
-    console.log("[Email Response] data:", JSON.stringify(data));
-    console.log("[Email Response] error:", JSON.stringify(error));
-
     if (error) {
       console.error("Failed to send magic link email:", error);
       return { success: false, error: error.message };
     }
-
-    console.log(`[Email Success] Magic link email sent to ${email} (id: ${data?.id})`);
     return { success: true };
   } catch (err) {
     console.error("Error sending magic link email:", err);
