@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { DonateButton } from "@/components/DonateButton";
+import { AuthButton } from "@/components/AuthButton";
 
 const navItems = [
   {
@@ -101,13 +102,15 @@ export function Header() {
               <span className="font-tech">{item.label}</span>
             </Link>
           ))}
-          <div className="ml-2">
+          <div className="ml-2 flex items-center gap-2">
+            <AuthButton />
             <DonateButton variant="button" className="text-sm py-2 px-4" />
           </div>
         </nav>
 
-        {/* Mobile Donate + Menu */}
+        {/* Mobile Auth + Donate + Menu */}
         <div className="flex items-center gap-2 lg:hidden">
+          <AuthButton />
           <DonateButton variant="button" className="text-xs py-1.5 px-3" />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
