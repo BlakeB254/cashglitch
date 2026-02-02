@@ -28,7 +28,7 @@ export async function sendMagicLinkEmail(
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: email,
-      reply_to: replyTo,
+      replyTo: replyTo,
       subject: "Your CashGlitch Sign-In Link",
       headers: {
         "X-Entity-Ref-ID": token.slice(0, 8),
