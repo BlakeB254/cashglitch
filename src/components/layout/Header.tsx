@@ -13,7 +13,7 @@ import {
 import {
   Menu,
   Heart,
-  Gift,
+  Trophy,
   Plane,
   Briefcase,
   Handshake,
@@ -21,6 +21,7 @@ import {
   Monitor,
 } from "lucide-react";
 import Image from "next/image";
+import { DonateButton } from "@/components/DonateButton";
 
 const navItems = [
   {
@@ -30,10 +31,10 @@ const navItems = [
     description: "Non-Profit Organizations",
   },
   {
-    label: "Giveaway",
-    href: "/giveaway",
-    icon: Gift,
-    description: "Free resources",
+    label: "Sweepstakes",
+    href: "/sweepstakes",
+    icon: Trophy,
+    description: "Win prizes & opportunities",
   },
   {
     label: "Free Travel",
@@ -100,52 +101,58 @@ export function Header() {
               <span className="font-tech">{item.label}</span>
             </Link>
           ))}
+          <div className="ml-2">
+            <DonateButton variant="button" className="text-sm py-2 px-4" />
+          </div>
         </nav>
 
-        {/* Mobile Navigation */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild className="lg:hidden">
-            <Button variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="w-80 bg-[#0f0a1a] border-l border-primary/30"
-          >
-            <SheetHeader>
-              <SheetTitle className="flex items-center gap-2 text-primary font-matrix text-glow">
-                <Image
-                  src="/images/symbol-transparent.png"
-                  alt="Cash Glitch"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 object-contain"
-                />
-                CASHGLITCH
-              </SheetTitle>
-            </SheetHeader>
-            <nav className="mt-8 flex flex-col gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 border border-transparent hover:border-primary/30 transition-all"
-                >
-                  <item.icon className="h-5 w-5" />
-                  <div className="flex flex-col">
-                    <span>{item.label}</span>
-                    <span className="text-xs text-primary/50">
-                      {item.description}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </nav>
-          </SheetContent>
-        </Sheet>
+        {/* Mobile Donate + Menu */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <DonateButton variant="button" className="text-xs py-1.5 px-3" />
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="w-80 bg-[#0f0a1a] border-l border-primary/30"
+            >
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2 text-primary font-matrix text-glow">
+                  <Image
+                    src="/images/symbol-transparent.png"
+                    alt="Cash Glitch"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 object-contain"
+                  />
+                  CASHGLITCH
+                </SheetTitle>
+              </SheetHeader>
+              <nav className="mt-8 flex flex-col gap-2">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 border border-transparent hover:border-primary/30 transition-all"
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <div className="flex flex-col">
+                      <span>{item.label}</span>
+                      <span className="text-xs text-primary/50">
+                        {item.description}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

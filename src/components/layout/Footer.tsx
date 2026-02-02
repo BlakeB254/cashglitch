@@ -4,7 +4,7 @@ import { DollarSign, Heart, Mail, ExternalLink } from "lucide-react";
 const footerLinks = {
   resources: [
     { label: "NPO Directory", href: "/npo" },
-    { label: "Giveaways", href: "/giveaway" },
+    { label: "Sweepstakes", href: "/sweepstakes" },
     { label: "Free Travel", href: "/free-travel" },
     { label: "Job Board", href: "/jobs" },
   ],

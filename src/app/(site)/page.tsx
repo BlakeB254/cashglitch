@@ -1,64 +1,47 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Heart,
-  Gift,
-  Plane,
-  Briefcase,
-  Handshake,
-  Laptop,
-  Monitor,
-  ExternalLink,
-} from "lucide-react";
-
-const categories = [
-  {
-    title: "NPO Directory",
-    description: "Non-profit organizations creating systemic change",
-    href: "/npo",
-    icon: Heart,
-  },
-  {
-    title: "Giveaways",
-    description: "Grants, scholarships & free resources",
-    href: "/giveaway",
-    icon: Gift,
-  },
-  {
-    title: "Free Travel",
-    description: "Travel programs & cultural exchanges",
-    href: "/free-travel",
-    icon: Plane,
-  },
-  {
-    title: "Jobs",
-    description: "Career opportunities with equity-focused orgs",
-    href: "/jobs",
-    icon: Briefcase,
-  },
-  {
-    title: "Partner",
-    description: "Partner or advertise with us",
-    href: "/partner",
-    icon: Handshake,
-  },
-  {
-    title: "Donate PC",
-    description: "Give the gift of technology",
-    href: "/donate-computer",
-    icon: Laptop,
-  },
-  {
-    title: "Get Free PC",
-    description: "Apply for a free computer",
-    href: "/get-computer",
-    icon: Monitor,
-  },
-];
+import { ExternalLink, Loader2 } from "lucide-react";
+import { DynamicIcon } from "@/components/DynamicIcon";
+import { DonateButton } from "@/components/DonateButton";
+import type { Category, SiteSettings } from "@/lib/shared";
 
 export default function Home() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [catRes, settingsRes] = await Promise.all([
+          fetch("/api/categories"),
+          fetch("/api/site-settings"),
+        ]);
+
+        if (catRes.ok) {
+          const catData = await catRes.json();
+          setCategories(catData);
+        }
+
+        if (settingsRes.ok) {
+          const settingsData = await settingsRes.json();
+          setSettings(settingsData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const tagline = settings?.siteTagline || "The only Glitch is how much help you'll find";
+
   return (
     <div className="min-h-screen text-primary relative overflow-x-hidden">
       {/* CRT Overlay */}
@@ -103,7 +86,7 @@ export default function Home() {
 
           {/* Tagline */}
           <p className="mt-8 text-xl md:text-2xl text-primary/80 tracking-widest font-matrix animate-pulse">
-            Organizing a broken system. Let&apos;s fix it.
+            {tagline}
           </p>
         </div>
 
@@ -112,23 +95,39 @@ export default function Home() {
           <h2 className="text-center text-lg text-primary/60 mb-6 font-tech tracking-wider">
             // ACCESS POINTS
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.map((category) => (
-              <Link
-                key={category.href}
-                href={category.href}
-                className="card-matrix p-4 flex flex-col items-center text-center group"
-              >
-                <category.icon className="w-8 h-8 mb-3 text-primary/60 group-hover:text-primary transition-colors" />
-                <h3 className="text-sm font-tech text-primary mb-1">
-                  {category.title}
-                </h3>
-                <p className="text-xs text-primary/40 hidden md:block">
-                  {category.description}
-                </p>
-              </Link>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {categories.map((category) => (
+                <Link
+                  key={category.id}
+                  href={category.href}
+                  className="card-matrix p-4 flex flex-col items-center text-center group"
+                >
+                  <DynamicIcon
+                    name={category.icon}
+                    className="w-8 h-8 mb-3 text-primary/60 group-hover:text-primary transition-colors"
+                  />
+                  <h3 className="text-sm font-tech text-primary mb-1">
+                    {category.title}
+                  </h3>
+                  {category.description && (
+                    <p className="text-xs text-primary/40 hidden md:block">
+                      {category.description}
+                    </p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Donate Section */}
+        <div className="w-full max-w-md mb-12">
+          <DonateButton variant="full" />
         </div>
 
         {/* Terminal Footer */}
@@ -138,7 +137,7 @@ export default function Home() {
           <p>&gt; RESOURCE GLITCH DETECTED IN SECTOR 7G</p>
           <div className="mt-6 flex justify-center">
             <a
-              href="https://twitter.com"
+              href={settings?.twitterUrl || "https://twitter.com"}
               target="_blank"
               rel="noopener noreferrer"
               className="glitch-text-link inline-flex items-center gap-2 text-primary hover:text-white transition-colors text-lg font-matrix tracking-wider"

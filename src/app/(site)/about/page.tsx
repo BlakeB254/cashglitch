@@ -231,7 +231,7 @@ export default function AboutPage() {
             className="bg-white text-primary hover:bg-white/90"
             asChild
           >
-            <Link href="/giveaway">
+            <Link href="/sweepstakes">
               Explore Resources <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

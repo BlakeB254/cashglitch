@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Gift,
+  Trophy,
   ExternalLink,
   Calendar,
   DollarSign,
@@ -18,31 +18,31 @@ import {
   Home,
   Briefcase,
   Heart,
-  ArrowRight,
+  Gift,
   Clock,
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Giveaways & Free Resources",
+  title: "Sweepstakes & Opportunities",
   description:
-    "Access free resources, grants, scholarships, and opportunities designed to build generational wealth and prosperity.",
-  keywords: ["free grants", "scholarships", "FAFSA", "Pell Grant", "housing assistance", "SNAP benefits", "free money", "financial aid"],
+    "Enter sweepstakes, win prizes, access grants, scholarships, and opportunities designed to build generational wealth and prosperity.",
+  keywords: ["sweepstakes", "free grants", "scholarships", "FAFSA", "Pell Grant", "win prizes", "free money", "financial aid", "contests"],
   openGraph: {
-    title: "Giveaways & Free Resources | CashGlitch",
-    description: "Access free resources, grants, scholarships, and opportunities designed to build generational wealth.",
+    title: "Sweepstakes & Opportunities | CashGlitch",
+    description: "Enter sweepstakes, win prizes, and access opportunities designed to build generational wealth.",
     images: ["/images/og-image.png"],
   },
 };
 
 const categories = [
-  { name: "All", icon: Gift, count: 24 },
+  { name: "All", icon: Trophy, count: 24 },
   { name: "Grants", icon: DollarSign, count: 8 },
   { name: "Scholarships", icon: GraduationCap, count: 6 },
   { name: "Housing", icon: Home, count: 4 },
   { name: "Business", icon: Briefcase, count: 6 },
 ];
 
-const giveaways = [
+const sweepstakes = [
   {
     title: "FAFSA - Federal Student Aid",
     description:
@@ -145,9 +145,9 @@ const giveaways = [
   },
 ];
 
-export default function GiveawayPage() {
-  const featuredGiveaways = giveaways.filter((g) => g.featured);
-  const allGiveaways = giveaways.filter((g) => !g.featured);
+export default function SweepstakesPage() {
+  const featuredSweepstakes = sweepstakes.filter((s) => s.featured);
+  const allSweepstakes = sweepstakes.filter((s) => !s.featured);
 
   return (
     <div className="flex flex-col">
@@ -156,15 +156,15 @@ export default function GiveawayPage() {
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-3xl">
             <Badge className="mb-4 bg-amber-500/20 text-amber-700 hover:bg-amber-500/30">
-              <Gift className="h-3 w-3 mr-1" /> Free Resources
+              <Trophy className="h-3 w-3 mr-1" /> Sweepstakes & Prizes
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Giveaways & Opportunities
+              Sweepstakes & Opportunities
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Access grants, scholarships, housing assistance, and business
+              Enter sweepstakes, win prizes, access grants, scholarships, and business
               opportunities designed to create pathways to generational wealth.
-              All resources are free to apply.
+              All entries are free.
             </p>
           </div>
         </div>
@@ -192,46 +192,46 @@ export default function GiveawayPage() {
         </div>
       </section>
 
-      {/* Featured Giveaways */}
+      {/* Featured Sweepstakes */}
       <section className="container mx-auto px-4 py-16">
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-2">Featured Opportunities</h2>
           <p className="text-muted-foreground">
-            High-impact resources with significant value
+            High-impact prizes and resources with significant value
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {featuredGiveaways.map((giveaway) => (
-            <Card key={giveaway.title} className="border-2 border-amber-200">
+          {featuredSweepstakes.map((item) => (
+            <Card key={item.title} className="border-2 border-amber-200">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <Badge className="mb-2 bg-amber-100 text-amber-800">
-                    {giveaway.category}
+                    {item.category}
                   </Badge>
                   <Badge variant="outline" className="text-xs">
                     <Clock className="h-3 w-3 mr-1" />
-                    {giveaway.deadline}
+                    {item.deadline}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl">{giveaway.title}</CardTitle>
+                <CardTitle className="text-xl">{item.title}</CardTitle>
                 <CardDescription className="leading-relaxed">
-                  {giveaway.description}
+                  {item.description}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-lg font-semibold text-primary">
                     <DollarSign className="h-5 w-5" />
-                    {giveaway.value}
+                    {item.value}
                   </div>
                   <Button asChild>
                     <a
-                      href={giveaway.link}
+                      href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Apply Now <ExternalLink className="ml-2 h-4 w-4" />
+                      Enter Now <ExternalLink className="ml-2 h-4 w-4" />
                     </a>
                   </Button>
                 </div>
@@ -240,40 +240,40 @@ export default function GiveawayPage() {
           ))}
         </div>
 
-        {/* All Giveaways */}
+        {/* All Sweepstakes */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-2">All Resources</h2>
+          <h2 className="text-2xl font-bold mb-2">All Opportunities</h2>
           <p className="text-muted-foreground">
-            Browse our complete list of free opportunities
+            Browse our complete list of sweepstakes and prizes
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allGiveaways.map((giveaway) => (
+          {allSweepstakes.map((item) => (
             <Card
-              key={giveaway.title}
+              key={item.title}
               className="hover:shadow-lg transition-shadow"
             >
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <Badge variant="outline">{giveaway.category}</Badge>
+                  <Badge variant="outline">{item.category}</Badge>
                   <span className="text-xs text-muted-foreground">
-                    {giveaway.deadline}
+                    {item.deadline}
                   </span>
                 </div>
-                <CardTitle className="text-lg">{giveaway.title}</CardTitle>
+                <CardTitle className="text-lg">{item.title}</CardTitle>
                 <CardDescription className="line-clamp-2">
-                  {giveaway.description}
+                  {item.description}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-primary">
-                    {giveaway.value}
+                    {item.value}
                   </span>
                   <Button variant="link" className="p-0 h-auto" asChild>
                     <a
-                      href={giveaway.link}
+                      href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -292,14 +292,14 @@ export default function GiveawayPage() {
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-center">
-              Tips for Applying
+              Tips for Entering
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="p-6 text-center">
                 <Calendar className="h-8 w-8 mx-auto mb-4 text-primary" />
                 <h3 className="font-semibold mb-2">Check Deadlines</h3>
                 <p className="text-sm text-muted-foreground">
-                  Many programs have specific application windows. Mark your
+                  Many sweepstakes have specific entry windows. Mark your
                   calendar.
                 </p>
               </Card>
@@ -311,10 +311,10 @@ export default function GiveawayPage() {
                 </p>
               </Card>
               <Card className="p-6 text-center">
-                <Gift className="h-8 w-8 mx-auto mb-4 text-primary" />
-                <h3 className="font-semibold mb-2">Apply Widely</h3>
+                <Trophy className="h-8 w-8 mx-auto mb-4 text-primary" />
+                <h3 className="font-semibold mb-2">Enter Often</h3>
                 <p className="text-sm text-muted-foreground">
-                  Don&apos;t limit yourself. Apply to multiple programs that fit
+                  Don&apos;t limit yourself. Enter multiple sweepstakes that fit
                   your situation.
                 </p>
               </Card>

@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CashGlitch - Organizing a Broken System",
+    default: "CashGlitch - The only Glitch is how much help you'll find",
     template: "%s | CashGlitch",
   },
   description:
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://cashglitch.org",
     siteName: "CashGlitch",
-    title: "CashGlitch - The System is Broken. Fix It.",
+    title: "CashGlitch - The only Glitch is how much help you'll find",
     description:
       "Unlock free resources, grants, scholarships, and opportunities. The abundance matrix is active.",
     images: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CashGlitch - Organizing a Broken System",
+    title: "CashGlitch - The only Glitch is how much help you'll find",
     description:
       "Unlock free resources, grants, scholarships, and opportunities. The abundance matrix is active.",
     images: ["/images/og-image.png"],
