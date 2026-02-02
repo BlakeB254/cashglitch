@@ -112,7 +112,24 @@ export async function deleteAllUserSessions(email: string): Promise<void> {
 
 // Get magic link URL
 export function getMagicLinkUrl(token: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  // Priority: APP_URL > NEXT_PUBLIC_APP_URL > VERCEL_URL > localhost
+  let baseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL;
+
+  if (!baseUrl && process.env.VERCEL_URL) {
+    // Vercel provides VERCEL_URL automatically (without protocol)
+    baseUrl = `https://${process.env.VERCEL_URL}`;
+  }
+
+  if (!baseUrl && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    // Vercel also provides the production URL
+    baseUrl = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+
+  // Default to localhost for development
+  if (!baseUrl) {
+    baseUrl = "http://localhost:3000";
+  }
+
   return `${baseUrl}/verify?token=${token}`;
 }
 
