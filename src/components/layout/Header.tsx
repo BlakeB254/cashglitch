@@ -28,7 +28,7 @@ import {
   Briefcase,
   Monitor,
   ChevronDown,
-  FolderOpen,
+  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import { DonateButton } from "@/components/DonateButton";
@@ -68,7 +68,7 @@ const resourceItems = [
     label: "Free Travel",
     href: "/free-travel",
     icon: Plane,
-    description: "Travel programs & opportunities",
+    description: "Travel programs & flight deals",
   },
   {
     label: "Jobs",
@@ -83,9 +83,6 @@ const resourceItems = [
     description: "Free computer programs",
   },
 ];
-
-// All items for mobile menu
-const allNavItems = [...mainNavItems, ...resourceItems];
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -122,35 +119,46 @@ export function Header() {
             </Link>
           ))}
 
-          {/* Resources Dropdown */}
+          {/* Resources Dropdown - Desktop */}
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="nav-link flex items-center gap-1.5 px-3 py-2 text-sm text-primary/80 hover:text-primary bg-transparent hover:bg-primary/10 data-[state=open]:bg-primary/10">
-                  <FolderOpen className="h-4 w-4" />
+                <NavigationMenuTrigger className="h-auto nav-link flex items-center gap-1.5 px-3 py-2 text-sm text-primary/80 hover:text-primary bg-transparent hover:bg-primary/10 data-[state=open]:bg-primary/10 data-[state=open]:text-primary rounded-md">
+                  <Sparkles className="h-4 w-4" />
                   <span className="font-tech">Resources</span>
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-[#0f0a1a] border border-primary/30">
-                  <ul className="grid w-[200px] gap-1 p-2">
-                    {resourceItems.map((item) => (
-                      <li key={item.href}>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href={item.href}
-                            className="flex items-center gap-3 px-3 py-2 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 rounded-md transition-all"
-                          >
-                            <item.icon className="h-4 w-4" />
-                            <div className="flex flex-col">
-                              <span>{item.label}</span>
-                              <span className="text-xs text-primary/50">
-                                {item.description}
-                              </span>
-                            </div>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
+                <NavigationMenuContent className="bg-[#0f0a1a]/95 backdrop-blur-xl border border-primary/40 shadow-[0_0_30px_rgba(168,85,247,0.15)] rounded-lg">
+                  <div className="p-3 w-[240px]">
+                    <div className="mb-2 px-2">
+                      <span className="text-[10px] font-tech text-primary/40 uppercase tracking-wider">
+                        Free Resources
+                      </span>
+                    </div>
+                    <ul className="grid gap-1">
+                      {resourceItems.map((item) => (
+                        <li key={item.href}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={item.href}
+                              className="group flex items-center gap-3 px-3 py-2.5 text-sm font-tech rounded-md transition-all hover:bg-gradient-to-r hover:from-primary/10 hover:to-pink-500/10 border border-transparent hover:border-primary/20"
+                            >
+                              <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                                <item.icon className="h-4 w-4 text-primary" />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-primary/90 group-hover:text-primary">
+                                  {item.label}
+                                </span>
+                                <span className="text-[11px] text-primary/40 group-hover:text-primary/50">
+                                  {item.description}
+                                </span>
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -189,55 +197,75 @@ export function Header() {
                   CASHGLITCH
                 </SheetTitle>
               </SheetHeader>
-              <nav className="mt-8 flex flex-col gap-2">
+              <nav className="mt-8 flex flex-col gap-1">
                 {mainNavItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 border border-transparent hover:border-primary/30 transition-all"
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                   >
-                    <item.icon className="h-5 w-5" />
+                    <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10">
+                      <item.icon className="h-4 w-4 text-primary/80" />
+                    </div>
                     <div className="flex flex-col">
                       <span>{item.label}</span>
-                      <span className="text-xs text-primary/50">
+                      <span className="text-[11px] text-primary/40">
                         {item.description}
                       </span>
                     </div>
                   </Link>
                 ))}
 
-                {/* Resources Section */}
+                {/* Resources Section - Mobile */}
                 <div className="mt-4 pt-4 border-t border-primary/20">
+                  <div className="px-4 mb-2">
+                    <span className="text-[10px] font-tech text-primary/40 uppercase tracking-wider">
+                      Free Resources
+                    </span>
+                  </div>
                   <button
                     onClick={() => setResourcesOpen(!resourcesOpen)}
-                    className="flex items-center justify-between w-full px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 border border-transparent hover:border-primary/30 transition-all"
+                    className="flex items-center justify-between w-full px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                   >
                     <div className="flex items-center gap-3">
-                      <FolderOpen className="h-5 w-5" />
+                      <div className="flex items-center justify-center w-8 h-8 rounded-md bg-gradient-to-br from-primary/20 to-pink-500/20">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                      </div>
                       <span>Resources</span>
                     </div>
                     <ChevronDown
-                      className={`h-4 w-4 transition-transform ${
+                      className={`h-4 w-4 text-primary/60 transition-transform duration-200 ${
                         resourcesOpen ? "rotate-180" : ""
                       }`}
                     />
                   </button>
-                  {resourcesOpen && (
-                    <div className="ml-4 mt-1 flex flex-col gap-1">
+
+                  {/* Collapsible Resources Items */}
+                  <div
+                    className={`overflow-hidden transition-all duration-200 ${
+                      resourcesOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-primary/20 pl-4">
                       {resourceItems.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
                           onClick={() => setIsOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2 text-sm font-tech text-primary/60 hover:text-primary hover:bg-primary/10 transition-all"
+                          className="flex items-center gap-3 px-3 py-2.5 text-sm font-tech text-primary/60 hover:text-primary hover:bg-primary/5 rounded-md transition-all"
                         >
                           <item.icon className="h-4 w-4" />
-                          <span>{item.label}</span>
+                          <div className="flex flex-col">
+                            <span>{item.label}</span>
+                            <span className="text-[10px] text-primary/30">
+                              {item.description}
+                            </span>
+                          </div>
                         </Link>
                       ))}
                     </div>
-                  )}
+                  </div>
                 </div>
               </nav>
             </SheetContent>
