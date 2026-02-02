@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyMagicLinkToken, isAdminEmail } from "@/lib/auth";
+import { verifyMagicLinkToken, isAdminEmail, deleteAllUserSessions } from "@/lib/auth";
 import { setSessionCookie, grantAccess } from "@/lib/session";
 
 export async function POST(request: NextRequest) {
@@ -22,6 +22,14 @@ export async function POST(request: NextRequest) {
 
     // Check if user is admin
     const isAdmin = isAdminEmail(result.email);
+
+    // Log admin check for debugging
+    console.log("[Verify] Email:", result.email);
+    console.log("[Verify] ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
+    console.log("[Verify] isAdmin:", isAdmin);
+
+    // Delete any existing sessions for this user to ensure fresh admin status
+    await deleteAllUserSessions(result.email);
 
     // Create session and set cookie
     await setSessionCookie(result.email);

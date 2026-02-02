@@ -86,7 +86,7 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
           {
             id: 2,
             screenType: "email",
-            title: "Enter the Matrix",
+            title: "The only Glitch is how much help you'll find",
             subtitle: "// WE'LL SEND YOU AN ACCESS LINK",
             options: { showSkipButton: true, skipButtonText: "no email" },
             sortOrder: 1,

@@ -188,7 +188,7 @@ export async function seedDefaultIntroScreens() {
       INSERT INTO intro_screens (screen_type, title, subtitle, options, sort_order)
       VALUES (
         'email',
-        'Enter the Matrix',
+        'The only Glitch is how much help you''ll find',
         '// WE''LL SEND YOU AN ACCESS LINK',
         ${JSON.stringify({ showSkipButton: true, skipButtonText: "no email" })},
         1

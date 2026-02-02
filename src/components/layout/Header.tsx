@@ -11,20 +11,31 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
   Menu,
   Heart,
   Trophy,
-  Plane,
-  Briefcase,
   Handshake,
   Laptop,
+  Plane,
+  Briefcase,
   Monitor,
+  ChevronDown,
+  FolderOpen,
 } from "lucide-react";
 import Image from "next/image";
 import { DonateButton } from "@/components/DonateButton";
 import { AuthButton } from "@/components/AuthButton";
 
-const navItems = [
+// Main nav items (shown directly in nav)
+const mainNavItems = [
   {
     label: "NPO",
     href: "/npo",
@@ -38,18 +49,6 @@ const navItems = [
     description: "Win prizes & opportunities",
   },
   {
-    label: "Free Travel",
-    href: "/free-travel",
-    icon: Plane,
-    description: "Travel programs",
-  },
-  {
-    label: "Jobs",
-    href: "/jobs",
-    icon: Briefcase,
-    description: "Career opportunities",
-  },
-  {
     label: "Partner",
     href: "/partner",
     icon: Handshake,
@@ -61,16 +60,36 @@ const navItems = [
     icon: Laptop,
     description: "Give technology",
   },
+];
+
+// Resources dropdown items
+const resourceItems = [
   {
-    label: "Get PC",
+    label: "Free Travel",
+    href: "/free-travel",
+    icon: Plane,
+    description: "Travel programs & opportunities",
+  },
+  {
+    label: "Jobs",
+    href: "/jobs",
+    icon: Briefcase,
+    description: "Career opportunities",
+  },
+  {
+    label: "Get a PC",
     href: "/get-computer",
     icon: Monitor,
-    description: "Free computer",
+    description: "Free computer programs",
   },
 ];
 
+// All items for mobile menu
+const allNavItems = [...mainNavItems, ...resourceItems];
+
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-[#0f0a1a]/80 backdrop-blur-md border-b border-primary/30">
@@ -92,7 +111,7 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => (
+          {mainNavItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -102,6 +121,41 @@ export function Header() {
               <span className="font-tech">{item.label}</span>
             </Link>
           ))}
+
+          {/* Resources Dropdown */}
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="nav-link flex items-center gap-1.5 px-3 py-2 text-sm text-primary/80 hover:text-primary bg-transparent hover:bg-primary/10 data-[state=open]:bg-primary/10">
+                  <FolderOpen className="h-4 w-4" />
+                  <span className="font-tech">Resources</span>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-[#0f0a1a] border border-primary/30">
+                  <ul className="grid w-[200px] gap-1 p-2">
+                    {resourceItems.map((item) => (
+                      <li key={item.href}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={item.href}
+                            className="flex items-center gap-3 px-3 py-2 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 rounded-md transition-all"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <div className="flex flex-col">
+                              <span>{item.label}</span>
+                              <span className="text-xs text-primary/50">
+                                {item.description}
+                              </span>
+                            </div>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
           <div className="ml-2 flex items-center gap-2">
             <AuthButton />
             <DonateButton variant="button" className="text-sm py-2 px-4" />
@@ -136,7 +190,7 @@ export function Header() {
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-2">
-                {navItems.map((item) => (
+                {mainNavItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -152,6 +206,39 @@ export function Header() {
                     </div>
                   </Link>
                 ))}
+
+                {/* Resources Section */}
+                <div className="mt-4 pt-4 border-t border-primary/20">
+                  <button
+                    onClick={() => setResourcesOpen(!resourcesOpen)}
+                    className="flex items-center justify-between w-full px-4 py-3 text-sm font-tech text-primary/80 hover:text-primary hover:bg-primary/10 border border-transparent hover:border-primary/30 transition-all"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FolderOpen className="h-5 w-5" />
+                      <span>Resources</span>
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${
+                        resourcesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {resourcesOpen && (
+                    <div className="ml-4 mt-1 flex flex-col gap-1">
+                      {resourceItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2 text-sm font-tech text-primary/60 hover:text-primary hover:bg-primary/10 transition-all"
+                        >
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </nav>
             </SheetContent>
           </Sheet>
