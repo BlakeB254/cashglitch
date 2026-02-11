@@ -29,6 +29,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Stripe Checkout session
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "https://cashglitch.org";
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -38,7 +40,7 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: "CashGlitch Donation",
               description: "Support the CashGlitch mission to connect people with free resources and opportunities",
-              images: [`${process.env.NEXT_PUBLIC_APP_URL || "https://cashglitch.com"}/images/logo-transparent.png`],
+              images: [`${appUrl}/images/logo-transparent.png`],
             },
             unit_amount: donationAmount,
           },
@@ -46,8 +48,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/donate/cancel`,
+      success_url: `${appUrl}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/donate/cancel`,
       metadata: {
         donation_type: "one_time",
         source: "website",
