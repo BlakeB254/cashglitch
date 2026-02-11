@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-import { sql, initializeDonations } from "@/lib/db";
+import { sql, initializeDonations, initializeSweepstakes, initializeRafflePurchases } from "@/lib/db";
 
 export async function POST(request: NextRequest) {
   if (!stripe) {
@@ -48,7 +48,46 @@ export async function POST(request: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
 
-        if (session.metadata?.donation_type === "one_time") {
+        if (session.metadata?.purchase_type === "raffle") {
+          // Handle raffle ticket purchase
+          await initializeSweepstakes();
+          await initializeRafflePurchases();
+
+          const sweepstakeId = parseInt(session.metadata.sweepstake_id, 10);
+          const ticketCount = parseInt(session.metadata.ticket_count, 10);
+
+          await sql`
+            INSERT INTO raffle_purchases (
+              sweepstake_id,
+              stripe_session_id,
+              stripe_payment_intent,
+              buyer_email,
+              buyer_name,
+              ticket_count,
+              amount_cents,
+              status
+            ) VALUES (
+              ${sweepstakeId},
+              ${session.id},
+              ${typeof session.payment_intent === "string" ? session.payment_intent : null},
+              ${session.metadata.buyer_email ?? session.customer_details?.email ?? ""},
+              ${session.customer_details?.name ?? null},
+              ${ticketCount},
+              ${session.amount_total ?? 0},
+              ${"completed"}
+            )
+            ON CONFLICT (stripe_session_id) DO NOTHING
+          `;
+
+          // Increment tickets_sold on the sweepstake
+          await sql`
+            UPDATE sweepstakes
+            SET tickets_sold = tickets_sold + ${ticketCount},
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ${sweepstakeId}
+          `;
+        } else if (session.metadata?.donation_type === "one_time") {
+          // Handle donation
           await initializeDonations();
 
           await sql`

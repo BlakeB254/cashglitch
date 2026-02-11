@@ -145,6 +145,49 @@ export async function initializeDonations() {
   `;
 }
 
+// Initialize sweepstakes table (admin-managed raffle listings)
+export async function initializeSweepstakes() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS sweepstakes (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      prize_description TEXT,
+      ticket_price_cents INTEGER NOT NULL DEFAULT 500,
+      max_tickets INTEGER,
+      tickets_sold INTEGER NOT NULL DEFAULT 0,
+      draw_date TIMESTAMP WITH TIME ZONE,
+      status VARCHAR(50) NOT NULL DEFAULT 'active',
+      image_url VARCHAR(500),
+      is_featured BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+}
+
+// Initialize raffle_purchases table (ticket purchase records)
+export async function initializeRafflePurchases() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS raffle_purchases (
+      id SERIAL PRIMARY KEY,
+      sweepstake_id INTEGER NOT NULL REFERENCES sweepstakes(id),
+      stripe_session_id VARCHAR(255) NOT NULL UNIQUE,
+      stripe_payment_intent VARCHAR(255),
+      buyer_email VARCHAR(255) NOT NULL,
+      buyer_name VARCHAR(255),
+      ticket_count INTEGER NOT NULL DEFAULT 1,
+      amount_cents INTEGER NOT NULL,
+      status VARCHAR(50) NOT NULL DEFAULT 'completed',
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_raffle_purchases_sweepstake ON raffle_purchases(sweepstake_id)
+  `;
+}
+
 // Initialize all tables
 export async function initializeAllTables() {
   await initializeDatabase();
@@ -157,6 +200,8 @@ export async function initializeAllTables() {
   await initializePageContent();
   await initializePageItems();
   await initializeDonations();
+  await initializeSweepstakes();
+  await initializeRafflePurchases();
 }
 
 // Seed default categories if none exist
@@ -278,17 +323,17 @@ export async function seedDefaultPageContent() {
       },
       {
         page_slug: "sweepstakes",
-        hero_title: "Sweepstakes & Opportunities",
-        hero_subtitle: "Sweepstakes & Prizes",
-        hero_description: "Enter sweepstakes, win prizes, access grants, scholarships, and business opportunities designed to create pathways to generational wealth. All entries are free.",
-        hero_badge_text: "Sweepstakes & Prizes",
+        hero_title: "Sweepstakes",
+        hero_subtitle: "Raffles & Prizes",
+        hero_description: "Enter sweepstakes, buy raffle tickets, and win prizes. Every ticket supports the mission while giving you a chance at amazing prizes.",
+        hero_badge_text: "Raffles & Prizes",
         cta_title: "Tips for Entering",
         cta_description: "Check deadlines, be authentic, and enter often.",
         cta_button_text: "View All",
         cta_button_link: "#",
-        meta_title: "Sweepstakes & Opportunities | CashGlitch",
-        meta_description: "Enter sweepstakes, win prizes, access grants, scholarships, and opportunities designed to build generational wealth and prosperity.",
-        meta_keywords: "sweepstakes,free grants,scholarships,FAFSA,Pell Grant,win prizes,free money,financial aid,contests",
+        meta_title: "Sweepstakes | CashGlitch",
+        meta_description: "Enter sweepstakes, buy raffle tickets, and win prizes. Every ticket supports the CashGlitch mission.",
+        meta_keywords: "sweepstakes,raffle,win prizes,raffle tickets,contests,giveaway",
       },
       {
         page_slug: "free-travel",

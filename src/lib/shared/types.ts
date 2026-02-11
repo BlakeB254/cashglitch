@@ -248,6 +248,53 @@ export interface DonationRow {
   created_at: string;
 }
 
+// Sweepstake types (raffle listings)
+export interface SweepstakeRow {
+  id: number;
+  title: string;
+  description: string | null;
+  prize_description: string | null;
+  ticket_price_cents: number;
+  max_tickets: number | null;
+  tickets_sold: number;
+  draw_date: string | null;
+  status: string;
+  image_url: string | null;
+  is_featured: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Sweepstake {
+  id: number;
+  title: string;
+  description: string | null;
+  prizeDescription: string | null;
+  ticketPriceCents: number;
+  maxTickets: number | null;
+  ticketsSold: number;
+  drawDate: string | null;
+  status: string;
+  imageUrl: string | null;
+  isFeatured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Raffle purchase types
+export interface RafflePurchaseRow {
+  id: number;
+  sweepstake_id: number;
+  stripe_session_id: string;
+  stripe_payment_intent: string | null;
+  buyer_email: string;
+  buyer_name: string | null;
+  ticket_count: number;
+  amount_cents: number;
+  status: string;
+  created_at: string;
+}
+
 // Admin dashboard stats
 export interface DashboardStats {
   totalSubscribers: number;
@@ -264,6 +311,8 @@ export interface DashboardStats {
   totalDonations: number;
   totalDonationsCents: number;
   recentDonations: number;
+  totalTicketsSold: number;
+  totalTicketRevenueCents: number;
 }
 
 // Available icons for categories

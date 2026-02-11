@@ -45,7 +45,7 @@ const mainNavItems = [
     label: "Sweepstakes",
     href: "/sweepstakes",
     icon: Trophy,
-    description: "Win prizes & opportunities",
+    description: "Win prizes & raffles",
   },
   {
     label: "Partner",
