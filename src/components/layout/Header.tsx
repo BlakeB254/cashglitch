@@ -31,7 +31,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
-import { DonateButton } from "@/components/DonateButton";
 import { AuthButton } from "@/components/AuthButton";
 
 // Main nav items (shown directly in nav)
@@ -166,14 +165,26 @@ export function Header() {
 
           <div className="ml-2 flex items-center gap-2">
             <AuthButton />
-            <DonateButton variant="button" className="text-sm py-2 px-4" />
+            <Link
+              href="/donate"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-tech text-sm rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40"
+            >
+              <Heart className="w-4 h-4" />
+              <span>DONATE</span>
+            </Link>
           </div>
         </nav>
 
         {/* Mobile Auth + Donate + Menu */}
         <div className="flex items-center gap-2 lg:hidden">
           <AuthButton />
-          <DonateButton variant="button" className="text-xs py-1.5 px-3" />
+          <Link
+            href="/donate"
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-tech text-xs rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40"
+          >
+            <Heart className="w-3.5 h-3.5" />
+            <span>DONATE</span>
+          </Link>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
