@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Stripe Checkout session
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "https://cashglitch.org";
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "https://cashglitch.org").trim();
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
