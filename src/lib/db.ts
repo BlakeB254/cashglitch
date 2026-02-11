@@ -118,6 +118,33 @@ export async function initializeIntroScreens() {
   `;
 }
 
+// Initialize donations table for tracking Stripe payments
+export async function initializeDonations() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS donations (
+      id SERIAL PRIMARY KEY,
+      stripe_session_id VARCHAR(255) NOT NULL UNIQUE,
+      stripe_payment_intent VARCHAR(255),
+      amount_cents INTEGER NOT NULL,
+      currency VARCHAR(10) NOT NULL DEFAULT 'usd',
+      donor_email VARCHAR(255),
+      donor_name VARCHAR(255),
+      status VARCHAR(50) NOT NULL DEFAULT 'completed',
+      donation_type VARCHAR(50) NOT NULL DEFAULT 'one_time',
+      metadata JSONB,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_donations_status ON donations(status)
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_donations_created ON donations(created_at)
+  `;
+}
+
 // Initialize all tables
 export async function initializeAllTables() {
   await initializeDatabase();
@@ -129,6 +156,7 @@ export async function initializeAllTables() {
   await initializeIntroScreens();
   await initializePageContent();
   await initializePageItems();
+  await initializeDonations();
 }
 
 // Seed default categories if none exist

@@ -233,6 +233,21 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
+// Donation types
+export interface DonationRow {
+  id: number;
+  stripe_session_id: string;
+  stripe_payment_intent: string | null;
+  amount_cents: number;
+  currency: string;
+  donor_email: string | null;
+  donor_name: string | null;
+  status: string;
+  donation_type: string;
+  metadata: string | null;
+  created_at: string;
+}
+
 // Admin dashboard stats
 export interface DashboardStats {
   totalSubscribers: number;
@@ -246,6 +261,9 @@ export interface DashboardStats {
   publishedPosts: number;
   totalCategories: number;
   activeCategories: number;
+  totalDonations: number;
+  totalDonationsCents: number;
+  recentDonations: number;
 }
 
 // Available icons for categories

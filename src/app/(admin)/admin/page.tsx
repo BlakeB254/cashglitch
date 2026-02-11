@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users, FileText, Grid, TrendingUp, Loader2 } from "lucide-react";
+import { Users, FileText, Grid, TrendingUp, Loader2, Heart } from "lucide-react";
 import type { DashboardStats } from "@/lib/shared";
 
 function StatCard({
@@ -102,17 +102,14 @@ export default function AdminDashboard() {
           subtitle={`${stats?.activeCategories ?? 0} active`}
         />
         <StatCard
-          title="Response Rate"
+          title="Donations"
           value={
-            stats && stats.totalSubscribers > 0
-              ? `${Math.round(
-                  ((stats.responseBreakdown.yes + stats.responseBreakdown.no) /
-                    stats.totalSubscribers) *
-                    100
-                )}%`
-              : "N/A"
+            stats
+              ? `$${((stats.totalDonationsCents ?? 0) / 100).toFixed(2)}`
+              : "$0.00"
           }
-          icon={TrendingUp}
+          icon={Heart}
+          subtitle={`${stats?.totalDonations ?? 0} total (${stats?.recentDonations ?? 0} this week)`}
         />
       </div>
 

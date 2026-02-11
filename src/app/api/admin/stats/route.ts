@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
-import { sql, initializeDatabase, initializeBlogPosts, initializeCategories, seedDefaultCategories } from "@/lib/db";
+import { sql, initializeDatabase, initializeBlogPosts, initializeCategories, seedDefaultCategories, initializeDonations } from "@/lib/db";
 import type { DashboardStats } from "@/lib/shared";
 
 export async function GET() {
@@ -14,6 +14,7 @@ export async function GET() {
     await initializeBlogPosts();
     await initializeCategories();
     await seedDefaultCategories();
+    await initializeDonations();
 
     // Get total subscribers
     const totalResult = await sql`
@@ -55,6 +56,18 @@ export async function GET() {
       SELECT COUNT(*) as count FROM categories WHERE is_active = true
     `;
 
+    // Get donation stats
+    const totalDonationsResult = await sql`
+      SELECT COUNT(*) as count FROM donations WHERE status = 'completed'
+    `;
+    const totalDonationsCentsResult = await sql`
+      SELECT COALESCE(SUM(amount_cents), 0) as total FROM donations WHERE status = 'completed'
+    `;
+    const recentDonationsResult = await sql`
+      SELECT COUNT(*) as count FROM donations
+      WHERE status = 'completed' AND created_at > NOW() - INTERVAL '7 days'
+    `;
+
     const stats: DashboardStats = {
       totalSubscribers,
       recentSignups,
@@ -67,6 +80,9 @@ export async function GET() {
       publishedPosts: parseInt(publishedPostsResult[0]?.count || "0", 10),
       totalCategories: parseInt(totalCategoriesResult[0]?.count || "0", 10),
       activeCategories: parseInt(activeCategoriesResult[0]?.count || "0", 10),
+      totalDonations: parseInt(totalDonationsResult[0]?.count || "0", 10),
+      totalDonationsCents: parseInt(totalDonationsCentsResult[0]?.total || "0", 10),
+      recentDonations: parseInt(recentDonationsResult[0]?.count || "0", 10),
     };
 
     return NextResponse.json(stats);
