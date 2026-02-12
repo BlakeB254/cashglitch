@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql, initializePageItems, seedDefaultPageItems } from "@/lib/db";
 import type { PageItemRow, PageItem } from "@/lib/shared";
 
+function parseTags(tags: unknown): string[] | null {
+  if (!tags) return null;
+  if (Array.isArray(tags)) return tags;
+  if (typeof tags === "string") {
+    try {
+      const parsed = JSON.parse(tags);
+      return Array.isArray(parsed) ? parsed : [tags];
+    } catch {
+      return tags.split(",").map((t) => t.trim()).filter(Boolean);
+    }
+  }
+  return null;
+}
+
 function transformPageItem(row: PageItemRow): PageItem {
   return {
     id: row.id,
@@ -13,7 +27,7 @@ function transformPageItem(row: PageItemRow): PageItem {
     deadline: row.deadline,
     value: row.value,
     website: row.website,
-    tags: row.tags ? JSON.parse(row.tags) : null,
+    tags: parseTags(row.tags as unknown),
     isFeatured: row.is_featured,
     sortOrder: row.sort_order,
     isActive: row.is_active,
