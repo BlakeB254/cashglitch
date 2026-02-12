@@ -22,6 +22,7 @@ import {
   Star,
   Clock,
 } from "lucide-react";
+import Image from "next/image";
 import type { Sweepstake } from "@/lib/shared";
 
 export default function SweepstakesPage() {
@@ -263,6 +264,16 @@ function SweepstakeCard({
 
   return (
     <Card className={featured ? "border-2 border-amber-200" : "hover:shadow-lg transition-shadow"}>
+      {item.imageUrl && (
+        <div className="relative w-full h-40 overflow-hidden rounded-t-lg">
+          <Image
+            src={item.imageUrl}
+            alt={item.title}
+            fill
+            className="object-cover"
+          />
+        </div>
+      )}
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">

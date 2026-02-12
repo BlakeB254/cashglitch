@@ -3,22 +3,24 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Loader2 } from "lucide-react";
+import { ExternalLink, Loader2, Trophy, Ticket, Clock } from "lucide-react";
 import { DynamicIcon } from "@/components/DynamicIcon";
 import { DonateButton } from "@/components/DonateButton";
-import type { Category, SiteSettings } from "@/lib/shared";
+import type { Category, SiteSettings, Sweepstake } from "@/lib/shared";
 
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [sweepstakes, setSweepstakes] = useState<Sweepstake[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catRes, settingsRes] = await Promise.all([
+        const [catRes, settingsRes, sweepRes] = await Promise.all([
           fetch("/api/categories"),
           fetch("/api/site-settings"),
+          fetch("/api/sweepstakes"),
         ]);
 
         if (catRes.ok) {
@@ -29,6 +31,11 @@ export default function Home() {
         if (settingsRes.ok) {
           const settingsData = await settingsRes.json();
           setSettings(settingsData);
+        }
+
+        if (sweepRes.ok) {
+          const sweepData = await sweepRes.json();
+          setSweepstakes(sweepData);
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -124,6 +131,60 @@ export default function Home() {
             </div>
           )}
         </div>
+
+        {/* Sweepstakes Feed */}
+        {sweepstakes.length > 0 && (
+          <div className="w-full max-w-4xl mb-12">
+            <h2 className="text-center text-lg text-primary/60 mb-6 font-tech tracking-wider">
+              // ACTIVE SWEEPSTAKES
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sweepstakes.map((s) => (
+                <Link
+                  key={s.id}
+                  href="/sweepstakes"
+                  className="card-matrix p-0 overflow-hidden group"
+                >
+                  {s.imageUrl && (
+                    <div className="relative w-full h-32 overflow-hidden">
+                      <Image
+                        src={s.imageUrl}
+                        alt={s.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Trophy className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                      <h3 className="text-sm font-tech text-primary truncate">
+                        {s.title}
+                      </h3>
+                    </div>
+                    {s.prizeDescription && (
+                      <p className="text-xs text-primary/60 mb-2 truncate">
+                        {s.prizeDescription}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-between text-[10px] text-primary/40 font-tech">
+                      <span className="flex items-center gap-1">
+                        <Ticket className="w-3 h-3" />
+                        ${(s.ticketPriceCents / 100).toFixed(2)}/ticket
+                      </span>
+                      {s.drawDate && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {new Date(s.drawDate).toLocaleDateString()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Donate Section */}
         <div className="w-full max-w-md mb-12">
