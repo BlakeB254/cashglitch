@@ -1,11 +1,10 @@
-import { Metadata } from "next";
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,29 +17,10 @@ import {
   Heart,
   ArrowRight,
   MapPin,
-  Phone,
-  Mail,
   Package,
+  Loader2,
 } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Donate a Computer",
-  description:
-    "Bridge the digital divide by donating your used computers and devices. Your contribution empowers individuals with technology access.",
-  keywords: ["donate computer", "computer donation", "digital divide", "technology donation", "donate laptop", "recycle electronics"],
-  openGraph: {
-    title: "Donate a Computer | CashGlitch",
-    description: "Bridge the digital divide by donating your used computers and devices.",
-    images: ["/images/og-image.png"],
-  },
-};
-
-const acceptedDevices = [
-  { name: "Laptops", years: "5 years old or newer", icon: Laptop },
-  { name: "Desktop Computers", years: "5 years old or newer", icon: Package },
-  { name: "Tablets", years: "3 years old or newer", icon: Laptop },
-  { name: "Monitors", years: "Working condition", icon: Package },
-];
+import type { PageContent, PageItem } from "@/lib/shared";
 
 const donationProcess = [
   {
@@ -80,7 +60,42 @@ const impactStats = [
   { value: "15", label: "Partner Schools" },
 ];
 
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Laptop,
+  Package,
+};
+
 export default function DonateComputerPage() {
+  const [pageContent, setPageContent] = useState<PageContent | null>(null);
+  const [items, setItems] = useState<PageItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [contentRes, itemsRes] = await Promise.all([
+          fetch("/api/page-content?slug=donate-computer"),
+          fetch("/api/page-items?slug=donate-computer"),
+        ]);
+        if (contentRes.ok) setPageContent(await contentRes.json());
+        if (itemsRes.ok) setItems(await itemsRes.json());
+      } catch (error) {
+        console.error("Failed to load page data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -88,15 +103,15 @@ export default function DonateComputerPage() {
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-3xl">
             <Badge className="mb-4 bg-orange-500/20 text-orange-700 hover:bg-orange-500/30">
-              <Laptop className="h-3 w-3 mr-1" /> Give Back
+              <Laptop className="h-3 w-3 mr-1" />{" "}
+              {pageContent?.heroBadgeText || "Give Back"}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Donate a Computer
+              {pageContent?.heroTitle || "Donate a Computer"}
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Your old laptop or desktop could be someone&apos;s gateway to
-              education, employment, and opportunity. Bridge the digital divide
-              by donating your used technology.
+              {pageContent?.heroDescription ||
+                "Your old laptop or desktop could be someone's gateway to education, employment, and opportunity."}
             </p>
           </div>
         </div>
@@ -121,71 +136,81 @@ export default function DonateComputerPage() {
       </section>
 
       {/* Accepted Devices */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">What We Accept</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            We accept working devices that can be refurbished for our community
-            members.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {acceptedDevices.map((device) => (
-            <Card key={device.name} className="text-center p-6">
-              <device.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h3 className="font-semibold mb-2">{device.name}</h3>
-              <p className="text-sm text-muted-foreground">{device.years}</p>
-            </Card>
-          ))}
-        </div>
-
-        {/* Requirements */}
-        <Card className="p-8 mb-16">
-          <h3 className="text-xl font-bold mb-6">Donation Requirements</h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-primary mb-3">We Accept:</h4>
-              <ul className="space-y-2">
-                {[
-                  "Working laptops and desktops (5 years or newer)",
-                  "Tablets in good condition",
-                  "Working monitors",
-                  "Keyboards and mice",
-                  "Power adapters and cables",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-green-600 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-destructive mb-3">
-                We Cannot Accept:
-              </h4>
-              <ul className="space-y-2">
-                {[
-                  "CRT monitors or TVs",
-                  "Printers or scanners",
-                  "Devices older than 5 years",
-                  "Non-working devices",
-                  "Devices with broken screens",
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-2 text-sm text-muted-foreground"
-                  >
-                    <span className="h-4 w-4 text-center shrink-0">×</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+      {items.length > 0 && (
+        <section className="container mx-auto px-4 py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">What We Accept</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              We accept working devices that can be refurbished for our
+              community members.
+            </p>
           </div>
-        </Card>
-      </section>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {items.map((device) => {
+              const DeviceIcon =
+                (device.category && iconMap[device.category]) || Laptop;
+              return (
+                <Card key={device.id} className="text-center p-6">
+                  <DeviceIcon className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="font-semibold mb-2">{device.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {device.description}
+                  </p>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Requirements */}
+          <Card className="p-8 mb-16">
+            <h3 className="text-xl font-bold mb-6">Donation Requirements</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold text-primary mb-3">We Accept:</h4>
+                <ul className="space-y-2">
+                  {[
+                    "Working laptops and desktops (5 years or newer)",
+                    "Tablets in good condition",
+                    "Working monitors",
+                    "Keyboards and mice",
+                    "Power adapters and cables",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-sm">
+                      <CheckCircle className="h-4 w-4 text-green-600 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-destructive mb-3">
+                  We Cannot Accept:
+                </h4>
+                <ul className="space-y-2">
+                  {[
+                    "CRT monitors or TVs",
+                    "Printers or scanners",
+                    "Devices older than 5 years",
+                    "Non-working devices",
+                    "Devices with broken screens",
+                  ].map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                    >
+                      <span className="h-4 w-4 text-center shrink-0">
+                        &times;
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Card>
+        </section>
+      )}
 
       {/* Process */}
       <section className="bg-muted/30 border-y">
@@ -223,13 +248,11 @@ export default function DonateComputerPage() {
       <section className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-3xl font-bold mb-6">
-              Ready to Donate?
-            </h2>
+            <h2 className="text-3xl font-bold mb-6">Ready to Donate?</h2>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              Fill out the form to start your donation. We offer free pickup
-              for donations of 5+ devices in select areas, or you can drop off
-              at one of our partner locations.
+              Fill out the form to start your donation. We offer free pickup for
+              donations of 5+ devices in select areas, or you can drop off at
+              one of our partner locations.
             </p>
 
             <div className="space-y-6">

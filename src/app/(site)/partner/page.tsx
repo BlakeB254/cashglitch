@@ -1,5 +1,6 @@
-import { Metadata } from "next";
-import Link from "next/link";
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -20,58 +21,9 @@ import {
   CheckCircle,
   Star,
   Globe,
+  Loader2,
 } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Partner With Us",
-  description:
-    "Join our mission to create abundance. Partner with CashGlitch to reach a community focused on prosperity and opportunity.",
-};
-
-const partnershipTypes = [
-  {
-    title: "Community Partner",
-    description:
-      "Join our network of organizations committed to creating pathways to prosperity. Get featured in our directory and reach people actively seeking resources.",
-    benefits: [
-      "Featured listing in our NPO directory",
-      "Cross-promotion on social media",
-      "Access to partnership events",
-      "Collaboration opportunities",
-    ],
-    icon: Heart,
-    color: "bg-rose-500/10 text-rose-600",
-    cta: "Become a Partner",
-  },
-  {
-    title: "Corporate Sponsor",
-    description:
-      "Align your brand with our mission of abundance and equity. Sponsor programs, events, or specific initiatives that create lasting impact.",
-    benefits: [
-      "Brand visibility on our platform",
-      "Sponsorship recognition",
-      "CSR reporting support",
-      "Community engagement opportunities",
-    ],
-    icon: Building,
-    color: "bg-violet-500/10 text-violet-600",
-    cta: "Explore Sponsorship",
-  },
-  {
-    title: "Advertiser",
-    description:
-      "Reach our engaged audience of people actively seeking opportunities for advancement. Ethical advertising that serves our community.",
-    benefits: [
-      "Targeted reach to motivated audience",
-      "Banner and sponsored content options",
-      "Newsletter placements",
-      "Category-specific advertising",
-    ],
-    icon: Megaphone,
-    color: "bg-amber-500/10 text-amber-600",
-    cta: "View Ad Options",
-  },
-];
+import type { PageContent, PageItem } from "@/lib/shared";
 
 const stats = [
   { label: "Monthly Visitors", value: "50K+" },
@@ -89,7 +41,43 @@ const currentPartners = [
   "Color of Change",
 ];
 
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Heart,
+  Building,
+  Megaphone,
+};
+
 export default function PartnerPage() {
+  const [pageContent, setPageContent] = useState<PageContent | null>(null);
+  const [items, setItems] = useState<PageItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [contentRes, itemsRes] = await Promise.all([
+          fetch("/api/page-content?slug=partner"),
+          fetch("/api/page-items?slug=partner"),
+        ]);
+        if (contentRes.ok) setPageContent(await contentRes.json());
+        if (itemsRes.ok) setItems(await itemsRes.json());
+      } catch (error) {
+        console.error("Failed to load page data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -97,15 +85,15 @@ export default function PartnerPage() {
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-3xl">
             <Badge className="mb-4 bg-violet-500/20 text-violet-700 hover:bg-violet-500/30">
-              <Handshake className="h-3 w-3 mr-1" /> Partnership
+              <Handshake className="h-3 w-3 mr-1" />{" "}
+              {pageContent?.heroBadgeText || "Partnership"}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Partner With CashGlitch
+              {pageContent?.heroTitle || "Partner With CashGlitch"}
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Join our mission to create pathways to abundance. Whether
-              you&apos;re a nonprofit, business, or organization committed to
-              equity, there&apos;s a place for you in our community.
+              {pageContent?.heroDescription ||
+                "Join our mission to create pathways to abundance."}
             </p>
           </div>
         </div>
@@ -130,47 +118,65 @@ export default function PartnerPage() {
       </section>
 
       {/* Partnership Types */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Ways to Partner</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Choose the partnership level that aligns with your goals and
-            capacity to create impact.
-          </p>
-        </div>
+      {items.length > 0 && (
+        <section className="container mx-auto px-4 py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Ways to Partner</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Choose the partnership level that aligns with your goals and
+              capacity to create impact.
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {partnershipTypes.map((type) => (
-            <Card key={type.title} className="flex flex-col">
-              <CardHeader>
-                <div
-                  className={`p-3 rounded-xl ${type.color} w-fit transition-transform hover:scale-110`}
-                >
-                  <type.icon className="h-6 w-6" />
-                </div>
-                <CardTitle className="mt-4">{type.title}</CardTitle>
-                <CardDescription className="leading-relaxed">
-                  {type.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                <ul className="space-y-3 mb-6 flex-1">
-                  {type.benefits.map((benefit) => (
-                    <li
-                      key={benefit}
-                      className="flex items-start gap-2 text-sm"
+          <div className="grid md:grid-cols-3 gap-8">
+            {items.map((type) => {
+              const colorMap: Record<string, string> = {
+                "Community Partner": "bg-rose-500/10 text-rose-600",
+                "Corporate Sponsor": "bg-violet-500/10 text-violet-600",
+                Advertiser: "bg-amber-500/10 text-amber-600",
+              };
+              const color =
+                colorMap[type.title] || "bg-primary/10 text-primary";
+              const IconComponent =
+                (type.category && iconMap[type.category]) || Heart;
+
+              return (
+                <Card key={type.id} className="flex flex-col">
+                  <CardHeader>
+                    <div
+                      className={`p-3 rounded-xl ${color} w-fit transition-transform hover:scale-110`}
                     >
-                      <CheckCircle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                      <span>{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button className="w-full">{type.cta}</Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
+                      <IconComponent className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="mt-4">{type.title}</CardTitle>
+                    <CardDescription className="leading-relaxed">
+                      {type.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex flex-col">
+                    {type.tags && type.tags.length > 0 && (
+                      <ul className="space-y-3 mb-6 flex-1">
+                        {type.tags.map((benefit) => (
+                          <li
+                            key={benefit}
+                            className="flex items-start gap-2 text-sm"
+                          >
+                            <CheckCircle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                            <span>{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <Button className="w-full">
+                      {type.value || "Learn More"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Why Partner */}
       <section className="bg-muted/30 border-y">
