@@ -112,6 +112,13 @@ export default function Home() {
                 <Link
                   key={category.id}
                   href={category.href}
+                  onClick={() => {
+                    fetch("/api/categories/track", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ id: category.id }),
+                    }).catch(() => {});
+                  }}
                   className="card-matrix p-4 flex flex-col items-center text-center group"
                 >
                   <DynamicIcon

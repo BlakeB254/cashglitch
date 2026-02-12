@@ -58,6 +58,11 @@ export async function GET() {
       SELECT COUNT(*) as count FROM categories WHERE is_active = true
     `;
 
+    // Get category click stats
+    const totalCategoryClicksResult = await sql`
+      SELECT COALESCE(SUM(click_count), 0) as total FROM categories
+    `;
+
     // Get donation stats
     const totalDonationsResult = await sql`
       SELECT COUNT(*) as count FROM donations WHERE status = 'completed'
@@ -90,6 +95,7 @@ export async function GET() {
       publishedPosts: parseInt(publishedPostsResult[0]?.count || "0", 10),
       totalCategories: parseInt(totalCategoriesResult[0]?.count || "0", 10),
       activeCategories: parseInt(activeCategoriesResult[0]?.count || "0", 10),
+      totalCategoryClicks: parseInt(totalCategoryClicksResult[0]?.total || "0", 10),
       totalDonations: parseInt(totalDonationsResult[0]?.count || "0", 10),
       totalDonationsCents: parseInt(totalDonationsCentsResult[0]?.total || "0", 10),
       recentDonations: parseInt(recentDonationsResult[0]?.count || "0", 10),

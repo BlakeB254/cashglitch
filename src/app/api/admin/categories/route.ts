@@ -12,6 +12,7 @@ function transformCategory(row: CategoryRow): Category {
     icon: row.icon,
     sortOrder: row.sort_order,
     isActive: row.is_active,
+    clickCount: row.click_count,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
   };
@@ -75,7 +76,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, title, description, href, icon, sortOrder, isActive } = body;
+    const { id, title, description, href, icon, sortOrder, isActive, clickCount } = body;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -89,6 +90,7 @@ export async function PUT(request: NextRequest) {
         icon = COALESCE(${icon}, icon),
         sort_order = COALESCE(${sortOrder}, sort_order),
         is_active = COALESCE(${isActive}, is_active),
+        click_count = COALESCE(${clickCount}, click_count),
         updated_at = NOW()
       WHERE id = ${id}
       RETURNING *

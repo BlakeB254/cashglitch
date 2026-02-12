@@ -372,6 +372,7 @@ export default function SettingsPage() {
                 icon: "Gift",
                 sortOrder: categories.length,
                 isActive: true,
+                clickCount: 0,
                 createdAt: new Date(),
                 updatedAt: new Date(),
               })

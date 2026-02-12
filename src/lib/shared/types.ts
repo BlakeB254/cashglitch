@@ -102,6 +102,7 @@ export interface Category {
   icon: string;
   sortOrder: number;
   isActive: boolean;
+  clickCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -114,6 +115,7 @@ export interface CategoryRow {
   icon: string;
   sort_order: number;
   is_active: boolean;
+  click_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -308,6 +310,7 @@ export interface DashboardStats {
   publishedPosts: number;
   totalCategories: number;
   activeCategories: number;
+  totalCategoryClicks: number;
   totalDonations: number;
   totalDonationsCents: number;
   recentDonations: number;

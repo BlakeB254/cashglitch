@@ -95,9 +95,15 @@ export async function initializeCategories() {
       icon VARCHAR(50) NOT NULL DEFAULT 'Gift',
       sort_order INTEGER NOT NULL DEFAULT 0,
       is_active BOOLEAN DEFAULT TRUE,
+      click_count INTEGER NOT NULL DEFAULT 0,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     )
+  `;
+
+  // Add click_count column if table already exists without it
+  await sql`
+    ALTER TABLE categories ADD COLUMN IF NOT EXISTS click_count INTEGER NOT NULL DEFAULT 0
   `;
 }
 

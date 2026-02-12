@@ -11,6 +11,7 @@ function transformCategory(row: CategoryRow): Category {
     icon: row.icon,
     sortOrder: row.sort_order,
     isActive: row.is_active,
+    clickCount: row.click_count,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
   };

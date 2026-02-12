@@ -11,11 +11,13 @@ import {
   Home,
   Layout,
   Trophy,
+  Grid3X3,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/subscribers", label: "Subscribers", icon: Users },
+  { href: "/admin/categories", label: "Categories", icon: Grid3X3 },
   { href: "/admin/pages", label: "Pages", icon: Layout },
   { href: "/admin/sweepstakes", label: "Sweepstakes", icon: Trophy },
   { href: "/admin/blog", label: "Blog", icon: FileText },
