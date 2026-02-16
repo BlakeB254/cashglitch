@@ -112,10 +112,10 @@ export default function LoginPage() {
             {/* Login Form */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-matrix text-primary text-glow mb-2">
-                Admin Login
+                Sign In
               </h1>
               <p className="text-primary/50 text-sm font-tech">
-                // ENTER YOUR EMAIL TO RECEIVE ACCESS LINK
+                // ENTER YOUR EMAIL TO ACCESS THE MATRIX
               </p>
             </div>
 
@@ -126,7 +126,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@example.com"
+                  placeholder="your@email.com"
                   required
                   autoFocus
                   className="w-full py-3 pl-12 pr-4 bg-primary/5 border border-primary/30 text-primary font-tech placeholder:text-primary/30 focus:outline-none focus:border-primary/60 focus:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-300"
@@ -154,7 +154,7 @@ export default function LoginPage() {
             </form>
 
             <p className="mt-6 text-primary/30 text-xs font-tech text-center">
-              Only authorized administrators can access the admin panel.
+              We&apos;ll send a magic link to your email to sign you in.
             </p>
 
             {/* Dev Mode Login - Only visible on localhost */}

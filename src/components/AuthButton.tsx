@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LogIn, LogOut, Shield, Loader2 } from "lucide-react";
+import { LogIn, LogOut, Shield, User, Loader2 } from "lucide-react";
 
 interface SessionInfo {
   authenticated: boolean;
@@ -48,20 +48,19 @@ export function AuthButton({ className = "" }: { className?: string }) {
 
   if (loading) {
     return (
-      <button
-        disabled
-        className={`inline-flex items-center gap-1.5 px-3 py-2 text-primary/40 font-tech text-xs ${className}`}
-      >
-        <Loader2 className="h-4 w-4 animate-spin" />
-      </button>
+      <div className={`flex items-center ${className}`}>
+        <span className="inline-flex items-center px-3 py-2 text-primary/40">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </span>
+      </div>
     );
   }
 
-  // If user is authenticated (has a valid session)
+  // Authenticated user
   if (session?.authenticated && session?.email) {
     return (
       <div className={`flex items-center gap-1 ${className}`}>
-        {session.isAdmin && (
+        {session.isAdmin ? (
           <button
             onClick={() => router.push("/admin")}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all"
@@ -69,13 +68,21 @@ export function AuthButton({ className = "" }: { className?: string }) {
             <Shield className="h-4 w-4" />
             <span>Admin</span>
           </button>
+        ) : (
+          <button
+            onClick={() => router.push("/")}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all"
+          >
+            <User className="h-4 w-4" />
+            <span>Dashboard</span>
+          </button>
         )}
         <button
           onClick={handleSignOut}
           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all"
         >
           <LogOut className="h-4 w-4" />
-          <span>Sign Out</span>
+          <span>Logout</span>
         </button>
       </div>
     );
