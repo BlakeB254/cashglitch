@@ -75,7 +75,7 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-matrix text-primary text-glow">Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-matrix text-primary text-glow">Dashboard</h1>
         <p className="text-primary/60 font-tech mt-1">
           // SYSTEM OVERVIEW
         </p>
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
         <h2 className="text-lg font-tech text-primary mb-4">
           "Are you ok?" Responses
         </h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-primary/10 rounded">
             <p className="text-2xl font-matrix text-green-400">
               {stats?.responseBreakdown.yes ?? 0}

@@ -174,7 +174,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-primary/20 pb-2">
+      <div className="flex gap-2 border-b border-primary/20 pb-2 overflow-x-auto">
         {[
           { id: "site", label: "Site Settings" },
           { id: "categories", label: "Categories" },
@@ -282,7 +282,7 @@ export default function SettingsPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-tech text-primary/80 mb-2">
                   Twitter URL
@@ -387,20 +387,22 @@ export default function SettingsPage() {
             {categories.map((category) => (
               <div
                 key={category.id}
-                className={`flex items-center gap-4 p-4 border rounded ${
+                className={`flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 border rounded ${
                   category.isActive
                     ? "bg-primary/5 border-primary/30"
                     : "bg-primary/5 border-primary/10 opacity-50"
                 }`}
               >
-                <GripVertical className="w-4 h-4 text-primary/30 cursor-move" />
-                <div className="flex-1">
-                  <p className="font-tech text-primary">{category.title}</p>
-                  <p className="text-xs text-primary/60">
-                    {category.href} | Icon: {category.icon}
-                  </p>
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <GripVertical className="w-4 h-4 text-primary/30 cursor-move flex-shrink-0 hidden sm:block" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-tech text-primary text-sm sm:text-base truncate">{category.title}</p>
+                    <p className="text-xs text-primary/60 truncate">
+                      {category.href} | {category.icon}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
                   <button
                     onClick={() => setEditingCategory(category)}
                     className="px-3 py-1 text-xs font-tech text-primary/60 hover:text-primary transition-colors"
@@ -457,33 +459,35 @@ export default function SettingsPage() {
             {introScreens.map((screen, index) => (
               <div
                 key={screen.id}
-                className={`flex items-center gap-4 p-4 border rounded ${
+                className={`flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 border rounded ${
                   screen.isActive
                     ? "bg-primary/5 border-primary/30"
                     : "bg-primary/5 border-primary/10 opacity-50"
                 }`}
               >
-                <div className="flex flex-col">
-                  <button
-                    disabled={index === 0}
-                    className="p-1 text-primary/30 hover:text-primary disabled:opacity-30 transition-colors"
-                  >
-                    <ChevronUp className="w-4 h-4" />
-                  </button>
-                  <button
-                    disabled={index === introScreens.length - 1}
-                    className="p-1 text-primary/30 hover:text-primary disabled:opacity-30 transition-colors"
-                  >
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="flex flex-col flex-shrink-0">
+                    <button
+                      disabled={index === 0}
+                      className="p-1 text-primary/30 hover:text-primary disabled:opacity-30 transition-colors"
+                    >
+                      <ChevronUp className="w-4 h-4" />
+                    </button>
+                    <button
+                      disabled={index === introScreens.length - 1}
+                      className="p-1 text-primary/30 hover:text-primary disabled:opacity-30 transition-colors"
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-tech text-primary text-sm sm:text-base truncate">{screen.title}</p>
+                    <p className="text-xs text-primary/60">
+                      {screen.screenType} | #{screen.sortOrder}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="font-tech text-primary">{screen.title}</p>
-                  <p className="text-xs text-primary/60">
-                    Type: {screen.screenType} | Order: {screen.sortOrder}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
                   <button
                     onClick={() => setEditingScreen(screen)}
                     className="px-3 py-1 text-xs font-tech text-primary/60 hover:text-primary transition-colors"
@@ -531,8 +535,8 @@ function CategoryModal({
   const [form, setForm] = useState(category);
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#0f0a1a] border border-primary/30 p-6 w-full max-w-md space-y-4">
+    <div className="fixed inset-0 bg-black/80 flex items-start lg:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+      <div className="bg-[#0f0a1a] border border-primary/30 p-4 sm:p-6 w-full max-w-md space-y-4 my-2 sm:my-0">
         <h2 className="text-xl font-matrix text-primary">
           {category.id ? "Edit Category" : "Add Category"}
         </h2>
@@ -665,8 +669,8 @@ function IntroScreenModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#0f0a1a] border border-primary/30 p-6 w-full max-w-md space-y-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/80 flex items-start lg:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+      <div className="bg-[#0f0a1a] border border-primary/30 p-4 sm:p-6 w-full max-w-md space-y-4 my-2 sm:my-0">
         <h2 className="text-xl font-matrix text-primary">
           {screen.id ? "Edit Intro Screen" : "Add Intro Screen"}
         </h2>

@@ -159,9 +159,9 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-matrix text-primary text-glow">
+          <h1 className="text-2xl sm:text-3xl font-matrix text-primary text-glow">
             Categories
           </h1>
           <p className="text-primary/60 font-tech mt-1">
@@ -201,7 +201,7 @@ export default function AdminCategoriesPage() {
       )}
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 border border-primary/20 rounded">
           <p className="text-xs font-tech text-primary/40 uppercase">Total</p>
           <p className="text-2xl font-matrix text-primary">
@@ -278,53 +278,48 @@ export default function AdminCategoriesPage() {
             .map((cat) => (
               <div
                 key={cat.id}
-                className={`flex items-center gap-4 p-4 border rounded transition-all ${
+                className={`flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 border rounded transition-all ${
                   cat.isActive
                     ? "bg-primary/5 border-primary/30"
                     : "bg-primary/5 border-primary/10 opacity-50"
                 }`}
               >
-                {/* Drag Handle (visual) */}
-                <GripVertical className="w-4 h-4 text-primary/20 flex-shrink-0" />
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <GripVertical className="w-4 h-4 text-primary/20 flex-shrink-0 hidden sm:block" />
 
-                {/* Icon */}
-                <div className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded flex-shrink-0">
-                  <DynamicIcon
-                    name={cat.icon}
-                    className="w-5 h-5 text-primary/60"
-                  />
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-tech text-primary truncate">
-                      {cat.title}
-                    </p>
-                    <span
-                      className={`text-[10px] font-tech px-2 py-0.5 rounded ${
-                        cat.isActive
-                          ? "bg-emerald-500/20 text-emerald-400"
-                          : "bg-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {cat.isActive ? "active" : "hidden"}
-                    </span>
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-primary/10 rounded flex-shrink-0">
+                    <DynamicIcon
+                      name={cat.icon}
+                      className="w-4 h-4 sm:w-5 sm:h-5 text-primary/60"
+                    />
                   </div>
-                  <p className="text-xs text-primary/60 flex items-center gap-3 flex-wrap">
-                    <span className="text-primary/40">{cat.href}</span>
-                    <span className="flex items-center gap-1">
-                      <MousePointerClick className="w-3 h-3" />
-                      {cat.clickCount} clicks
-                    </span>
-                    <span className="text-primary/30">
-                      Order: {cat.sortOrder}
-                    </span>
-                  </p>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-tech text-primary text-sm sm:text-base truncate">
+                        {cat.title}
+                      </p>
+                      <span
+                        className={`text-[10px] font-tech px-2 py-0.5 rounded flex-shrink-0 ${
+                          cat.isActive
+                            ? "bg-emerald-500/20 text-emerald-400"
+                            : "bg-red-500/20 text-red-400"
+                        }`}
+                      >
+                        {cat.isActive ? "active" : "hidden"}
+                      </span>
+                    </div>
+                    <p className="text-xs text-primary/60 flex items-center gap-2 sm:gap-3 flex-wrap">
+                      <span className="text-primary/40">{cat.href}</span>
+                      <span className="flex items-center gap-1">
+                        <MousePointerClick className="w-3 h-3" />
+                        {cat.clickCount}
+                      </span>
+                    </p>
+                  </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 self-end sm:self-auto flex-shrink-0">
                   <button
                     onClick={() => handleResetClicks(cat.id)}
                     className="p-2 text-primary/30 hover:text-primary/60 transition-colors"
@@ -393,8 +388,8 @@ function CategoryModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#0f0a1a] border border-primary/30 p-6 w-full max-w-lg space-y-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/80 flex items-start lg:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+      <div className="bg-[#0f0a1a] border border-primary/30 p-4 sm:p-6 w-full max-w-lg space-y-4 my-2 sm:my-0">
         <h2 className="text-xl font-matrix text-primary">
           {item.id ? "Edit Category" : "New Category"}
         </h2>
@@ -470,7 +465,7 @@ function CategoryModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-tech text-primary/80 mb-1">
                 Sort Order

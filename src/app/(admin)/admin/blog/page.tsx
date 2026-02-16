@@ -187,9 +187,9 @@ export default function BlogPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-matrix text-primary text-glow">Blog</h1>
+          <h1 className="text-2xl sm:text-3xl font-matrix text-primary text-glow">Blog</h1>
           <p className="text-primary/60 font-tech mt-1">
             // {posts.length} POSTS | {posts.filter((p) => p.published).length}{" "}
             PUBLISHED
@@ -214,38 +214,39 @@ export default function BlogPage() {
           posts.map((post) => (
             <div
               key={post.id}
-              className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded"
+              className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 bg-primary/5 border border-primary/20 rounded"
             >
-              {post.imageUrl && (
-                <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20 mr-4">
-                  <Image
-                    src={post.imageUrl}
-                    alt={post.title}
-                    width={48}
-                    height={48}
-                    className="w-full h-full object-cover"
-                  />
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                {post.imageUrl && (
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20">
+                    <Image
+                      src={post.imageUrl}
+                      alt={post.title}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-tech text-primary text-sm sm:text-base truncate">{post.title}</h3>
+                    {post.published ? (
+                      <span className="px-2 py-0.5 text-xs bg-green-500/20 text-green-400 rounded flex-shrink-0">
+                        Published
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 text-xs bg-primary/20 text-primary/60 rounded flex-shrink-0">
+                        Draft
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-primary/60 mt-1 truncate">
+                    /{post.slug} | {new Date(post.createdAt).toLocaleDateString()}
+                  </p>
                 </div>
-              )}
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-tech text-primary">{post.title}</h3>
-                  {post.published ? (
-                    <span className="px-2 py-0.5 text-xs bg-green-500/20 text-green-400 rounded">
-                      Published
-                    </span>
-                  ) : (
-                    <span className="px-2 py-0.5 text-xs bg-primary/20 text-primary/60 rounded">
-                      Draft
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-primary/60 mt-1">
-                  /{post.slug} | Created:{" "}
-                  {new Date(post.createdAt).toLocaleDateString()}
-                </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 self-end sm:self-auto flex-shrink-0">
                 <button
                   onClick={() => togglePublished(post)}
                   className="p-2 text-primary/60 hover:text-primary transition-colors"
@@ -277,8 +278,8 @@ export default function BlogPage() {
 
       {/* Editor Modal */}
       {isEditorOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#0f0a1a] border border-primary/30 p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto space-y-4">
+        <div className="fixed inset-0 bg-black/80 flex items-start lg:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+          <div className="bg-[#0f0a1a] border border-primary/30 p-4 sm:p-6 w-full max-w-3xl space-y-4 my-2 sm:my-0">
             <h2 className="text-xl font-matrix text-primary">
               {editingPost ? "Edit Post" : "New Post"}
             </h2>
@@ -373,7 +374,7 @@ export default function BlogPage() {
                 <textarea
                   value={formContent}
                   onChange={(e) => setFormContent(e.target.value)}
-                  rows={15}
+                  rows={10}
                   className="w-full px-4 py-2 bg-primary/5 border border-primary/30 text-primary font-mono text-sm focus:outline-none focus:border-primary/60"
                 />
               </div>

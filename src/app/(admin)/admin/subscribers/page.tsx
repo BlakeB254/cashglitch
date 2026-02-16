@@ -95,9 +95,9 @@ export default function SubscribersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-matrix text-primary text-glow">
+          <h1 className="text-2xl sm:text-3xl font-matrix text-primary text-glow">
             Subscribers
           </h1>
           <p className="text-primary/60 font-tech mt-1">

@@ -146,7 +146,7 @@ export default function PagesAdminPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-matrix text-primary text-glow">Page Content</h1>
+        <h1 className="text-2xl sm:text-3xl font-matrix text-primary text-glow">Page Content</h1>
         <p className="text-primary/60 font-tech mt-1">
           // MANAGE CONTENT FOR EACH PAGE SECTION
         </p>
@@ -265,7 +265,7 @@ export default function PagesAdminPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-tech text-primary/80 mb-1">
                   Button Text
@@ -374,8 +374,8 @@ export default function PagesAdminPage() {
 
       {/* Page Items Section */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-matrix text-primary">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h2 className="text-lg sm:text-xl font-matrix text-primary">
             {PAGE_LABELS[activeTab]} Items
           </h2>
           <button
@@ -416,58 +416,59 @@ export default function PagesAdminPage() {
             currentItems.map((item) => (
               <div
                 key={item.id}
-                className={`flex items-center gap-4 p-4 border rounded ${
+                className={`flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 border rounded ${
                   item.isActive
                     ? "bg-primary/5 border-primary/30"
                     : "bg-primary/5 border-primary/10 opacity-50"
                 }`}
               >
-                <div className="flex flex-col gap-1">
-                  <button className="p-1 text-primary/30 hover:text-primary transition-colors">
-                    <ChevronUp className="w-4 h-4" />
-                  </button>
-                  <button className="p-1 text-primary/30 hover:text-primary transition-colors">
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {item.imageUrl && (
-                  <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.title}
-                      width={48}
-                      height={48}
-                      className="w-full h-full object-cover"
-                    />
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="flex flex-col gap-1 flex-shrink-0">
+                    <button className="p-1 text-primary/30 hover:text-primary transition-colors">
+                      <ChevronUp className="w-4 h-4" />
+                    </button>
+                    <button className="p-1 text-primary/30 hover:text-primary transition-colors">
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
                   </div>
-                )}
 
-                {item.isFeatured && (
-                  <Star className="w-5 h-5 text-amber-400 fill-amber-400 flex-shrink-0" />
-                )}
+                  {item.imageUrl && (
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20">
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.title}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
 
-                <div className="flex-1 min-w-0">
-                  <p className="font-tech text-primary truncate">{item.title}</p>
-                  <p className="text-xs text-primary/60 truncate">
-                    {item.category && <span>{item.category} | </span>}
-                    {item.location && <span>{item.location} | </span>}
-                    {item.value && <span>{item.value}</span>}
-                  </p>
+                  {item.isFeatured && (
+                    <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 fill-amber-400 flex-shrink-0" />
+                  )}
+
+                  <div className="flex-1 min-w-0">
+                    <p className="font-tech text-primary text-sm sm:text-base truncate">{item.title}</p>
+                    <p className="text-xs text-primary/60 truncate">
+                      {item.category && <span>{item.category} | </span>}
+                      {item.location && <span>{item.location} | </span>}
+                      {item.value && <span>{item.value}</span>}
+                    </p>
+                  </div>
                 </div>
 
-                {item.website && (
-                  <a
-                    href={item.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 text-primary/40 hover:text-primary transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
-
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 self-end sm:self-auto flex-shrink-0">
+                  {item.website && (
+                    <a
+                      href={item.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 text-primary/40 hover:text-primary transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
                   <button
                     onClick={() => setEditingItem(item)}
                     className="p-2 text-primary/60 hover:text-primary transition-colors"
@@ -567,8 +568,8 @@ function ItemModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#0f0a1a] border border-primary/30 p-6 w-full max-w-lg space-y-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/80 flex items-start lg:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+      <div className="bg-[#0f0a1a] border border-primary/30 p-4 sm:p-6 w-full max-w-lg space-y-4 my-2 sm:my-0">
         <h2 className="text-xl font-matrix text-primary">
           {item.id ? "Edit Item" : "Add Item"}
         </h2>
@@ -655,7 +656,7 @@ function ItemModal({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-tech text-primary/80 mb-1">
                 Category
@@ -682,7 +683,7 @@ function ItemModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-tech text-primary/80 mb-1">
                 Deadline
@@ -735,7 +736,7 @@ function ItemModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-tech text-primary/80 mb-1">
                 Sort Order

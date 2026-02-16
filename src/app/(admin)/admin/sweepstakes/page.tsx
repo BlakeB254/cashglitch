@@ -115,9 +115,9 @@ export default function AdminSweepstakesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-matrix text-primary text-glow">
+          <h1 className="text-2xl sm:text-3xl font-matrix text-primary text-glow">
             Sweepstakes
           </h1>
           <p className="text-primary/60 font-tech mt-1">
@@ -160,7 +160,7 @@ export default function AdminSweepstakesPage() {
       )}
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 border border-primary/20 rounded">
           <p className="text-xs font-tech text-primary/40 uppercase">Active</p>
           <p className="text-2xl font-matrix text-primary">
@@ -200,69 +200,61 @@ export default function AdminSweepstakesPage() {
           sweepstakes.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center gap-4 p-4 border rounded ${
+              className={`flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 border rounded ${
                 item.status === "active"
                   ? "bg-primary/5 border-primary/30"
                   : "bg-primary/5 border-primary/10 opacity-50"
               }`}
             >
-              {/* Thumbnail */}
-              {item.imageUrl && (
-                <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20">
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.title}
-                    width={48}
-                    height={48}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                {item.imageUrl && (
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
 
-              {item.isFeatured && (
-                <Star className="w-5 h-5 text-amber-400 fill-amber-400 flex-shrink-0" />
-              )}
+                {item.isFeatured && (
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 fill-amber-400 flex-shrink-0" />
+                )}
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="font-tech text-primary truncate">
-                    {item.title}
-                  </p>
-                  <span
-                    className={`text-[10px] font-tech px-2 py-0.5 rounded ${
-                      item.status === "active"
-                        ? "bg-emerald-500/20 text-emerald-400"
-                        : item.status === "ended"
-                          ? "bg-red-500/20 text-red-400"
-                          : "bg-primary/20 text-primary/60"
-                    }`}
-                  >
-                    {item.status}
-                  </span>
-                </div>
-                <p className="text-xs text-primary/60 flex items-center gap-3 flex-wrap">
-                  <span className="flex items-center gap-1">
-                    <DollarSign className="w-3 h-3" />
-                    {formatPrice(item.ticketPriceCents)}/ticket
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Ticket className="w-3 h-3" />
-                    {item.ticketsSold} sold
-                    {item.maxTickets && ` / ${item.maxTickets}`}
-                  </span>
-                  {item.drawDate && (
-                    <span>
-                      Draw: {new Date(item.drawDate).toLocaleDateString()}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-tech text-primary text-sm sm:text-base truncate">
+                      {item.title}
+                    </p>
+                    <span
+                      className={`text-[10px] font-tech px-2 py-0.5 rounded flex-shrink-0 ${
+                        item.status === "active"
+                          ? "bg-emerald-500/20 text-emerald-400"
+                          : item.status === "ended"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-primary/20 text-primary/60"
+                      }`}
+                    >
+                      {item.status}
                     </span>
-                  )}
-                  <span>
-                    Revenue:{" "}
-                    {formatPrice(item.ticketsSold * item.ticketPriceCents)}
-                  </span>
-                </p>
+                  </div>
+                  <p className="text-xs text-primary/60 flex items-center gap-2 sm:gap-3 flex-wrap">
+                    <span className="flex items-center gap-1">
+                      <DollarSign className="w-3 h-3" />
+                      {formatPrice(item.ticketPriceCents)}/ticket
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Ticket className="w-3 h-3" />
+                      {item.ticketsSold} sold
+                      {item.maxTickets && ` / ${item.maxTickets}`}
+                    </span>
+                  </p>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 self-end sm:self-auto flex-shrink-0">
                 <button
                   onClick={() => setEditingItem(item)}
                   className="p-2 text-primary/60 hover:text-primary transition-colors"
@@ -358,8 +350,8 @@ function SweepstakeModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#0f0a1a] border border-primary/30 p-6 w-full max-w-lg space-y-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/80 flex items-start lg:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+      <div className="bg-[#0f0a1a] border border-primary/30 p-4 sm:p-6 w-full max-w-lg space-y-4 my-2 sm:my-0">
         <h2 className="text-xl font-matrix text-primary">
           {item.id ? "Edit Sweepstake" : "New Sweepstake"}
         </h2>
@@ -463,7 +455,7 @@ function SweepstakeModal({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-tech text-primary/80 mb-1">
                 Ticket Price ($)
@@ -497,7 +489,7 @@ function SweepstakeModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-tech text-primary/80 mb-1">
                 Draw Date

@@ -97,7 +97,7 @@ export function DataTable<T extends object>({
 
       {/* Pagination */}
       {total > 0 && (
-        <div className="flex items-center justify-between px-4 py-3 bg-primary/5 border-t border-primary/20">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-4 py-3 bg-primary/5 border-t border-primary/20">
           <div className="text-xs text-primary/60 font-tech">
             Showing {startItem} to {endItem} of {total}
           </div>
