@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LogIn, LogOut, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LogIn, LogOut, Shield, Loader2 } from "lucide-react";
 
 interface SessionInfo {
   authenticated: boolean;
@@ -36,9 +35,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
   const handleSignOut = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
-      // Clear sessionStorage access as well
       sessionStorage.removeItem("cashglitch_session_access");
-      // Reload to trigger the access gate
       window.location.href = "/";
     } catch (error) {
       console.error("Logout failed:", error);
@@ -50,47 +47,48 @@ export function AuthButton({ className = "" }: { className?: string }) {
   };
 
   if (loading) {
-    return null;
+    return (
+      <button
+        disabled
+        className={`inline-flex items-center gap-1.5 px-3 py-2 text-primary/40 font-tech text-xs ${className}`}
+      >
+        <Loader2 className="h-4 w-4 animate-spin" />
+      </button>
+    );
   }
 
   // If user is authenticated (has a valid session)
   if (session?.authenticated && session?.email) {
     return (
-      <div className={`flex items-center gap-2 ${className}`}>
+      <div className={`flex items-center gap-1 ${className}`}>
         {session.isAdmin && (
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={() => router.push("/admin")}
-            className="text-primary/80 hover:text-primary hover:bg-primary/10 gap-1.5"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all"
           >
             <Shield className="h-4 w-4" />
-            <span className="hidden sm:inline font-tech text-xs">Admin</span>
-          </Button>
+            <span>Admin</span>
+          </button>
         )}
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
           onClick={handleSignOut}
-          className="text-primary/80 hover:text-primary hover:bg-primary/10 gap-1.5"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all"
         >
           <LogOut className="h-4 w-4" />
-          <span className="hidden sm:inline font-tech text-xs">Sign Out</span>
-        </Button>
+          <span>Sign Out</span>
+        </button>
       </div>
     );
   }
 
-  // If user has temporary access (skipped email) or no access
+  // Not authenticated
   return (
-    <Button
-      variant="ghost"
-      size="sm"
+    <button
       onClick={handleSignIn}
-      className={`text-primary/80 hover:text-primary hover:bg-primary/10 gap-1.5 ${className}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all ${className}`}
     >
       <LogIn className="h-4 w-4" />
-      <span className="hidden sm:inline font-tech text-xs">Sign In</span>
-    </Button>
+      <span>Sign In</span>
+    </button>
   );
 }
