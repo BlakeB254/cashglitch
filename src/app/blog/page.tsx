@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
 import type { BlogPost } from "@/lib/shared";
 
@@ -69,8 +70,14 @@ export default function BlogPage() {
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="block p-6 bg-primary/5 border border-primary/20 hover:border-primary/40 transition-all group"
+                className="block bg-primary/5 border border-primary/20 hover:border-primary/40 transition-all group overflow-hidden"
               >
+                {post.imageUrl && (
+                  <div className="relative w-full h-48 overflow-hidden">
+                    <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+                  </div>
+                )}
+                <div className="p-6">
                 <h2 className="text-xl font-tech text-primary group-hover:text-glow mb-2">
                   {post.title}
                 </h2>
@@ -86,6 +93,7 @@ export default function BlogPage() {
                     month: "long",
                     day: "numeric",
                   })}
+                </div>
                 </div>
               </Link>
             ))}

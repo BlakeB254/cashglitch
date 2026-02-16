@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Save } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Save, Upload, X } from "lucide-react";
 import type { BlogPost } from "@/lib/shared";
 
 export default function BlogPage() {
@@ -16,6 +17,10 @@ export default function BlogPage() {
   const [formContent, setFormContent] = useState("");
   const [formExcerpt, setFormExcerpt] = useState("");
   const [formPublished, setFormPublished] = useState(false);
+  const [formImageUrl, setFormImageUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -43,19 +48,62 @@ export default function BlogPage() {
       setFormContent(post.content);
       setFormExcerpt(post.excerpt || "");
       setFormPublished(post.published);
+      setFormImageUrl(post.imageUrl || "");
     } else {
       setEditingPost(null);
       setFormTitle("");
       setFormContent("");
       setFormExcerpt("");
       setFormPublished(false);
+      setFormImageUrl("");
     }
+    setUploadError(null);
     setIsEditorOpen(true);
   };
 
   const closeEditor = () => {
     setIsEditorOpen(false);
     setEditingPost(null);
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploading(true);
+    setUploadError(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "blog");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setUploadError(data.error || "Upload failed");
+        return;
+      }
+
+      setFormImageUrl(data.url);
+    } catch (err) {
+      console.error("Upload error:", err);
+      setUploadError("Network error during upload");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageUpload(file);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleImageUpload(file);
   };
 
   const handleSave = async () => {
@@ -71,12 +119,14 @@ export default function BlogPage() {
             content: formContent,
             excerpt: formExcerpt || null,
             published: formPublished,
+            imageUrl: formImageUrl || null,
           }
         : {
             title: formTitle,
             content: formContent,
             excerpt: formExcerpt || null,
             published: formPublished,
+            imageUrl: formImageUrl || null,
           };
 
       const res = await fetch("/api/admin/blog", {
@@ -166,6 +216,17 @@ export default function BlogPage() {
               key={post.id}
               className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded"
             >
+              {post.imageUrl && (
+                <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20 mr-4">
+                  <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-tech text-primary">{post.title}</h3>
@@ -246,6 +307,63 @@ export default function BlogPage() {
                   placeholder="Brief summary of the post..."
                   className="w-full px-4 py-2 bg-primary/5 border border-primary/30 text-primary font-tech placeholder:text-primary/30 focus:outline-none focus:border-primary/60"
                 />
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-tech text-primary/80 mb-1">
+                  Featured Image
+                </label>
+                {formImageUrl ? (
+                  <div className="relative border border-primary/30 rounded overflow-hidden">
+                    <Image
+                      src={formImageUrl}
+                      alt="Blog post"
+                      width={720}
+                      height={200}
+                      className="w-full h-32 object-cover"
+                    />
+                    <button
+                      onClick={() => setFormImageUrl("")}
+                      className="absolute top-2 right-2 p-1 bg-black/60 rounded text-red-400 hover:text-red-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={(e) => e.preventDefault()}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-primary/30 rounded p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                  >
+                    {isUploading ? (
+                      <Loader2 className="w-6 h-6 mx-auto text-primary animate-spin" />
+                    ) : (
+                      <>
+                        <Upload className="w-6 h-6 mx-auto text-primary/40 mb-2" />
+                        <p className="text-xs font-tech text-primary/40">
+                          Click or drag image here
+                        </p>
+                        <p className="text-[10px] font-tech text-primary/20 mt-1">
+                          JPEG, PNG, WebP, GIF (max 5MB)
+                        </p>
+                      </>
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                  </div>
+                )}
+                {uploadError && (
+                  <p className="text-xs text-red-400 font-tech mt-1">
+                    {uploadError}
+                  </p>
+                )}
               </div>
 
               <div>

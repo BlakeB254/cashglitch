@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
 import type { BlogPost } from "@/lib/shared";
@@ -123,6 +124,13 @@ export default function BlogPostPage({
           <ArrowLeft className="w-4 h-4" />
           Back to Blog
         </Link>
+
+        {/* Hero Image */}
+        {post.imageUrl && (
+          <div className="relative w-full h-64 md:h-80 overflow-hidden mb-8 border border-primary/20">
+            <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+          </div>
+        )}
 
         {/* Post Header */}
         <article>

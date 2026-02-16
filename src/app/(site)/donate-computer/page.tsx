@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -151,7 +152,12 @@ export default function DonateComputerPage() {
               const DeviceIcon =
                 (device.category && iconMap[device.category]) || Laptop;
               return (
-                <Card key={device.id} className="text-center p-6">
+                <Card key={device.id} className="text-center p-6 overflow-hidden">
+                  {device.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden -mx-6 -mt-6 mb-4">
+                      <Image src={device.imageUrl} alt={device.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <DeviceIcon className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h3 className="font-semibold mb-2">{device.title}</h3>
                   <p className="text-sm text-muted-foreground">

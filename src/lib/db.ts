@@ -71,6 +71,8 @@ export async function initializeBlogPosts() {
   await sql`
     CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug)
   `;
+
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)`;
 }
 
 // Initialize site_settings table (key-value store)
@@ -601,6 +603,8 @@ export async function initializePageItems() {
   await sql`
     CREATE INDEX IF NOT EXISTS idx_page_items_slug ON page_items(page_slug)
   `;
+
+  await sql`ALTER TABLE page_items ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)`;
 }
 
 // Utility: Clean up expired tokens and sessions

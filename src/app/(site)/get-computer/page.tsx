@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -153,7 +154,12 @@ export default function GetComputerPage() {
               const CriteriaIcon =
                 (criteria.category && iconMap[criteria.category]) || Heart;
               return (
-                <Card key={criteria.id} className="text-center p-6">
+                <Card key={criteria.id} className="text-center p-6 overflow-hidden">
+                  {criteria.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden -mx-6 -mt-6 mb-4">
+                      <Image src={criteria.imageUrl} alt={criteria.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CriteriaIcon className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h3 className="font-semibold mb-2">{criteria.title}</h3>
                   <p className="text-sm text-muted-foreground">

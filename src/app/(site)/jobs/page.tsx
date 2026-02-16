@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -139,7 +140,12 @@ export default function JobsPage() {
 
             <div className="grid md:grid-cols-3 gap-6 mb-16">
               {featuredJobs.map((job) => (
-                <Card key={job.id} className="border-2 border-emerald-200">
+                <Card key={job.id} className="border-2 border-emerald-200 overflow-hidden">
+                  {job.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={job.imageUrl} alt={job.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       <Badge className="bg-emerald-100 text-emerald-800">
@@ -210,8 +216,13 @@ export default function JobsPage() {
               {allJobs.map((job) => (
                 <Card
                   key={job.id}
-                  className="hover:shadow-lg transition-shadow"
+                  className="hover:shadow-lg transition-shadow overflow-hidden"
                 >
+                  {job.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={job.imageUrl} alt={job.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="flex-1">

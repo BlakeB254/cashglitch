@@ -11,6 +11,7 @@ function transformPost(row: BlogPostRow): BlogPost {
     excerpt: row.excerpt,
     published: row.published,
     authorEmail: row.author_email,
+    imageUrl: row.image_url,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
   };

@@ -27,6 +27,7 @@ function transformPageItem(row: PageItemRow): PageItem {
     deadline: row.deadline,
     value: row.value,
     website: row.website,
+    imageUrl: row.image_url,
     tags: parseTags(row.tags as unknown),
     isFeatured: row.is_featured,
     sortOrder: row.sort_order,

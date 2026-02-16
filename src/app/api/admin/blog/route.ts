@@ -12,6 +12,7 @@ function transformPost(row: BlogPostRow): BlogPost {
     excerpt: row.excerpt,
     published: row.published,
     authorEmail: row.author_email,
+    imageUrl: row.image_url,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
   };
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, excerpt, published } = body;
+    const { title, content, excerpt, published, imageUrl } = body;
 
     if (!title || !content) {
       return NextResponse.json(
@@ -66,8 +67,8 @@ export async function POST(request: NextRequest) {
     const slug = generateSlug(title);
 
     const result = await sql`
-      INSERT INTO blog_posts (slug, title, content, excerpt, published, author_email)
-      VALUES (${slug}, ${title}, ${content}, ${excerpt || null}, ${published ?? false}, ${session.email})
+      INSERT INTO blog_posts (slug, title, content, excerpt, published, author_email, image_url)
+      VALUES (${slug}, ${title}, ${content}, ${excerpt || null}, ${published ?? false}, ${session.email}, ${imageUrl || null})
       RETURNING *
     ` as BlogPostRow[];
 
@@ -86,7 +87,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, title, content, excerpt, published } = body;
+    const { id, title, content, excerpt, published, imageUrl } = body;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -102,6 +103,7 @@ export async function PUT(request: NextRequest) {
         content = COALESCE(${content}, content),
         excerpt = COALESCE(${excerpt}, excerpt),
         published = COALESCE(${published}, published),
+        image_url = COALESCE(${imageUrl}, image_url),
         updated_at = NOW()
       WHERE id = ${id}
       RETURNING *

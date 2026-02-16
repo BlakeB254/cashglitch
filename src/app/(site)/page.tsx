@@ -3,24 +3,26 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Loader2, Trophy, Ticket, Clock } from "lucide-react";
+import { ExternalLink, Loader2, Trophy, Ticket, Clock, Calendar } from "lucide-react";
 import { DynamicIcon } from "@/components/DynamicIcon";
 import { DonateButton } from "@/components/DonateButton";
-import type { Category, SiteSettings, Sweepstake } from "@/lib/shared";
+import type { Category, SiteSettings, Sweepstake, BlogPost } from "@/lib/shared";
 
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [sweepstakes, setSweepstakes] = useState<Sweepstake[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catRes, settingsRes, sweepRes] = await Promise.all([
+        const [catRes, settingsRes, sweepRes, blogRes] = await Promise.all([
           fetch("/api/categories"),
           fetch("/api/site-settings"),
           fetch("/api/sweepstakes"),
+          fetch("/api/blog"),
         ]);
 
         if (catRes.ok) {
@@ -36,6 +38,11 @@ export default function Home() {
         if (sweepRes.ok) {
           const sweepData = await sweepRes.json();
           setSweepstakes(sweepData);
+        }
+
+        if (blogRes.ok) {
+          const blogData = await blogRes.json();
+          setBlogPosts(blogData);
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -185,6 +192,49 @@ export default function Home() {
                           {new Date(s.drawDate).toLocaleDateString()}
                         </span>
                       )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Latest Posts */}
+        {blogPosts.length > 0 && (
+          <div className="w-full max-w-4xl mb-12">
+            <h2 className="text-center text-lg text-primary/60 mb-6 font-tech tracking-wider">
+              // LATEST POSTS
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {blogPosts.slice(0, 3).map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/blog/${post.slug}`}
+                  className="card-matrix p-0 overflow-hidden group"
+                >
+                  {post.imageUrl && (
+                    <div className="relative w-full h-32 overflow-hidden">
+                      <Image
+                        src={post.imageUrl}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <h3 className="text-sm font-tech text-primary mb-2 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    {post.excerpt && (
+                      <p className="text-xs text-primary/60 mb-2 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-1 text-[10px] text-primary/40 font-tech">
+                      <Calendar className="w-3 h-3" />
+                      {new Date(post.createdAt).toLocaleDateString()}
                     </div>
                   </div>
                 </Link>

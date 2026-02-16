@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import {
   Loader2,
   Save,
@@ -11,6 +12,8 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  Upload,
+  X,
 } from "lucide-react";
 import type { PageContent, PageItem } from "@/lib/shared";
 import { PAGE_SLUGS, PAGE_LABELS, type PageSlug } from "@/lib/shared";
@@ -387,6 +390,7 @@ export default function PagesAdminPage() {
                 deadline: "",
                 value: "",
                 website: "",
+                imageUrl: null,
                 tags: [],
                 isFeatured: false,
                 sortOrder: currentItems.length,
@@ -426,6 +430,18 @@ export default function PagesAdminPage() {
                     <ChevronDown className="w-4 h-4" />
                   </button>
                 </div>
+
+                {item.imageUrl && (
+                  <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 border border-primary/20">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
 
                 {item.isFeatured && (
                   <Star className="w-5 h-5 text-amber-400 fill-amber-400 flex-shrink-0" />
@@ -498,6 +514,9 @@ function ItemModal({
 }) {
   const [form, setForm] = useState(item);
   const [tagsInput, setTagsInput] = useState(item.tags?.join(", ") || "");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     const tags = tagsInput
@@ -505,6 +524,46 @@ function ItemModal({
       .map((t) => t.trim())
       .filter(Boolean);
     onSave({ ...form, tags });
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploading(true);
+    setUploadError(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "pages");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setUploadError(data.error || "Upload failed");
+        return;
+      }
+
+      setForm({ ...form, imageUrl: data.url });
+    } catch (err) {
+      console.error("Upload error:", err);
+      setUploadError("Network error during upload");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageUpload(file);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleImageUpload(file);
   };
 
   return (
@@ -537,6 +596,63 @@ function ItemModal({
               rows={3}
               className="w-full px-3 py-2 bg-primary/5 border border-primary/30 text-primary font-tech focus:outline-none focus:border-primary/60"
             />
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-tech text-primary/80 mb-1">
+              Image
+            </label>
+            {form.imageUrl ? (
+              <div className="relative border border-primary/30 rounded overflow-hidden">
+                <Image
+                  src={form.imageUrl}
+                  alt="Item"
+                  width={480}
+                  height={200}
+                  className="w-full h-32 object-cover"
+                />
+                <button
+                  onClick={() => setForm({ ...form, imageUrl: null })}
+                  className="absolute top-2 right-2 p-1 bg-black/60 rounded text-red-400 hover:text-red-300"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div
+                onDrop={handleDrop}
+                onDragOver={(e) => e.preventDefault()}
+                onClick={() => fileInputRef.current?.click()}
+                className="border-2 border-dashed border-primary/30 rounded p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              >
+                {isUploading ? (
+                  <Loader2 className="w-6 h-6 mx-auto text-primary animate-spin" />
+                ) : (
+                  <>
+                    <Upload className="w-6 h-6 mx-auto text-primary/40 mb-2" />
+                    <p className="text-xs font-tech text-primary/40">
+                      Click or drag image here
+                    </p>
+                    <p className="text-[10px] font-tech text-primary/20 mt-1">
+                      JPEG, PNG, WebP, GIF (max 5MB)
+                    </p>
+                  </>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+              </div>
+            )}
+            {uploadError && (
+              <p className="text-xs text-red-400 font-tech mt-1">
+                {uploadError}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">

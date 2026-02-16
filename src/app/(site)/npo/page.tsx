@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -90,7 +91,12 @@ export default function NPOPage() {
 
             <div className="grid md:grid-cols-2 gap-6 mb-16">
               {featuredOrgs.map((org) => (
-                <Card key={org.id} className="border-2 border-rose-200">
+                <Card key={org.id} className="border-2 border-rose-200 overflow-hidden">
+                  {org.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={org.imageUrl} alt={org.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <Badge variant="secondary" className="mb-2">
@@ -156,8 +162,13 @@ export default function NPOPage() {
               {allOrgs.map((org) => (
                 <Card
                   key={org.id}
-                  className="hover:shadow-lg transition-shadow"
+                  className="hover:shadow-lg transition-shadow overflow-hidden"
                 >
+                  {org.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={org.imageUrl} alt={org.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardHeader>
                     <CardTitle className="text-lg">{org.title}</CardTitle>
                     <CardDescription className="line-clamp-2">

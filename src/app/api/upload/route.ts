@@ -33,7 +33,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const blob = await put(`sweepstakes/${Date.now()}-${file.name}`, file, {
+    const folder = (formData.get("folder") as string) || "general";
+    const safeFolder = folder.replace(/[^a-z0-9-]/gi, "").slice(0, 50) || "general";
+
+    const blob = await put(`${safeFolder}/${Date.now()}-${file.name}`, file, {
       access: "public",
     });
 

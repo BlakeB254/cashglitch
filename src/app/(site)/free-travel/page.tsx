@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -117,7 +118,12 @@ export default function FreeTravelPage() {
 
             <div className="grid md:grid-cols-3 gap-6 mb-16">
               {featuredPrograms.map((program) => (
-                <Card key={program.id} className="border-2 border-sky-200">
+                <Card key={program.id} className="border-2 border-sky-200 overflow-hidden">
+                  {program.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={program.imageUrl} alt={program.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardHeader>
                     {program.category && (
                       <Badge className="w-fit mb-2 bg-sky-100 text-sky-800">
@@ -183,8 +189,13 @@ export default function FreeTravelPage() {
               {allPrograms.map((program) => (
                 <Card
                   key={program.id}
-                  className="hover:shadow-lg transition-shadow"
+                  className="hover:shadow-lg transition-shadow overflow-hidden"
                 >
+                  {program.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={program.imageUrl} alt={program.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       {program.category && (

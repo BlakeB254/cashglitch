@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -141,7 +142,12 @@ export default function PartnerPage() {
                 (type.category && iconMap[type.category]) || Heart;
 
               return (
-                <Card key={type.id} className="flex flex-col">
+                <Card key={type.id} className="flex flex-col overflow-hidden">
+                  {type.imageUrl && (
+                    <div className="relative w-full h-40 overflow-hidden">
+                      <Image src={type.imageUrl} alt={type.title} fill className="object-cover" />
+                    </div>
+                  )}
                   <CardHeader>
                     <div
                       className={`p-3 rounded-xl ${color} w-fit transition-transform hover:scale-110`}

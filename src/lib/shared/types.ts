@@ -63,6 +63,7 @@ export interface BlogPost {
   excerpt: string | null;
   published: boolean;
   authorEmail: string;
+  imageUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -75,6 +76,7 @@ export interface BlogPostRow {
   excerpt: string | null;
   published: boolean;
   author_email: string;
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -84,6 +86,7 @@ export interface CreateBlogPostInput {
   content: string;
   excerpt?: string;
   published?: boolean;
+  imageUrl?: string;
 }
 
 export interface UpdateBlogPostInput {
@@ -91,6 +94,7 @@ export interface UpdateBlogPostInput {
   content?: string;
   excerpt?: string;
   published?: boolean;
+  imageUrl?: string;
 }
 
 // Category types (editable homepage items)
@@ -424,6 +428,7 @@ export interface PageItem {
   deadline: string | null;
   value: string | null;
   website: string | null;
+  imageUrl: string | null;
   tags: string[] | null;
   isFeatured: boolean;
   sortOrder: number;
@@ -442,6 +447,7 @@ export interface PageItemRow {
   deadline: string | null;
   value: string | null;
   website: string | null;
+  image_url: string | null;
   tags: string | null;
   is_featured: boolean;
   sort_order: number;
@@ -459,6 +465,7 @@ export interface CreatePageItemInput {
   deadline?: string;
   value?: string;
   website?: string;
+  imageUrl?: string;
   tags?: string[];
   isFeatured?: boolean;
   sortOrder?: number;
@@ -473,6 +480,7 @@ export interface UpdatePageItemInput {
   deadline?: string;
   value?: string;
   website?: string;
+  imageUrl?: string;
   tags?: string[];
   isFeatured?: boolean;
   sortOrder?: number;
