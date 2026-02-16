@@ -43,7 +43,7 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
         const sessionRes = await fetch("/api/auth/session");
         const sessionData = await sessionRes.json();
 
-        if (sessionData.hasAccess) {
+        if (sessionData.hasAccess || sessionData.authenticated) {
           setHasAccess(true);
           return;
         }

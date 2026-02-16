@@ -6,6 +6,7 @@ import { LogIn, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface SessionInfo {
+  authenticated: boolean;
   hasAccess: boolean;
   email?: string;
   isAdmin?: boolean;
@@ -23,7 +24,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
         const data = await res.json();
         setSession(data);
       } catch {
-        setSession({ hasAccess: false });
+        setSession({ authenticated: false, hasAccess: false });
       } finally {
         setLoading(false);
       }
@@ -52,8 +53,8 @@ export function AuthButton({ className = "" }: { className?: string }) {
     return null;
   }
 
-  // If user has access and is logged in
-  if (session?.hasAccess && session?.email) {
+  // If user is authenticated (has a valid session)
+  if (session?.authenticated && session?.email) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         {session.isAdmin && (
