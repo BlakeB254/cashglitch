@@ -14,6 +14,7 @@ const BYPASS_ROUTES = [
   "/admin",
   "/api",
   "/blog",
+  "/dashboard",
 ];
 
 export function AccessGate({ children }: { children: React.ReactNode }) {
@@ -43,7 +44,7 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
         const sessionRes = await fetch("/api/auth/session");
         const sessionData = await sessionRes.json();
 
-        if (sessionData.hasAccess || sessionData.authenticated) {
+        if (sessionData.hasAccess) {
           setHasAccess(true);
           return;
         }

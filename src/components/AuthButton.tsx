@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { LogIn, LogOut, Shield, User, Loader2 } from "lucide-react";
 
 interface SessionInfo {
-  authenticated: boolean;
   hasAccess: boolean;
   email?: string;
   isAdmin?: boolean;
@@ -23,7 +22,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
         const data = await res.json();
         setSession(data);
       } catch {
-        setSession({ authenticated: false, hasAccess: false });
+        setSession({ hasAccess: false });
       } finally {
         setLoading(false);
       }
@@ -56,8 +55,8 @@ export function AuthButton({ className = "" }: { className?: string }) {
     );
   }
 
-  // Authenticated user
-  if (session?.authenticated && session?.email) {
+  // Logged in — show admin or dashboard + logout
+  if (session?.hasAccess && session?.email) {
     return (
       <div className={`flex items-center gap-1 ${className}`}>
         {session.isAdmin ? (
@@ -70,7 +69,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
           </button>
         ) : (
           <button
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/dashboard")}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-primary/80 hover:text-primary hover:bg-primary/10 border border-primary/20 hover:border-primary/40 font-tech text-xs transition-all"
           >
             <User className="h-4 w-4" />
@@ -88,7 +87,7 @@ export function AuthButton({ className = "" }: { className?: string }) {
     );
   }
 
-  // Not authenticated
+  // Not logged in
   return (
     <button
       onClick={handleSignIn}
