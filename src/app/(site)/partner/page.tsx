@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -24,7 +23,8 @@ import {
   Globe,
   Loader2,
 } from "lucide-react";
-import type { PageContent, PageItem } from "@/lib/shared";
+import { usePageData } from "@/hooks/usePageData";
+import { PageHero } from "@/components/shared";
 
 const stats = [
   { label: "Monthly Visitors", value: "50K+" },
@@ -49,27 +49,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export default function PartnerPage() {
-  const [pageContent, setPageContent] = useState<PageContent | null>(null);
-  const [items, setItems] = useState<PageItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [contentRes, itemsRes] = await Promise.all([
-          fetch("/api/page-content?slug=partner"),
-          fetch("/api/page-items?slug=partner"),
-        ]);
-        if (contentRes.ok) setPageContent(await contentRes.json());
-        if (itemsRes.ok) setItems(await itemsRes.json());
-      } catch (error) {
-        console.error("Failed to load page data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+  const { pageContent, items, loading } = usePageData("partner");
 
   if (loading) {
     return (
@@ -81,24 +61,13 @@ export default function PartnerPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-violet-500/10 border-b">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <Badge className="mb-4 bg-violet-500/20 text-violet-700 hover:bg-violet-500/30">
-              <Handshake className="h-3 w-3 mr-1" />{" "}
-              {pageContent?.heroBadgeText || "Partnership"}
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {pageContent?.heroTitle || "Partner With CashGlitch"}
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {pageContent?.heroDescription ||
-                "Join our mission to create pathways to abundance."}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title={pageContent?.heroTitle || "Partner With CashGlitch"}
+        description={pageContent?.heroDescription || "Join our mission to create pathways to abundance."}
+        badgeText={pageContent?.heroBadgeText || "Partnership"}
+        badgeIcon={Handshake}
+        colorScheme="purple"
+      />
 
       {/* Stats */}
       <section className="border-b bg-muted/30">

@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
 function VerifyContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const token = searchParams.get("token");
 
   const [status, setStatus] = useState<"verifying" | "success" | "error">("verifying");
@@ -41,9 +40,11 @@ function VerifyContent() {
         setIsAdmin(data.isAdmin);
 
         // Redirect after short delay - admin goes to /admin, others to home
+        // Use window.location.href to force a full page reload so the
+        // AuthButton re-fetches session state and updates from Sign In → Logout
         setRedirecting(true);
         setTimeout(() => {
-          router.push(data.isAdmin ? "/admin" : "/");
+          window.location.href = data.isAdmin ? "/admin" : "/";
         }, 2000);
       } catch (err) {
         setStatus("error");
@@ -52,7 +53,7 @@ function VerifyContent() {
     };
 
     verifyToken();
-  }, [token, router]);
+  }, [token]);
 
   return (
     <div className="min-h-screen bg-[#0f0a1a] flex flex-col items-center justify-center p-4">

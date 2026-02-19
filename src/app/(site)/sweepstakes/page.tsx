@@ -23,6 +23,7 @@ import {
   Clock,
 } from "lucide-react";
 import Image from "next/image";
+import { PageHero, SectionHeader } from "@/components/shared";
 import type { Sweepstake } from "@/lib/shared";
 
 export default function SweepstakesPage() {
@@ -117,24 +118,13 @@ export default function SweepstakesPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-amber-500/10 border-b">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <Badge className="mb-4 bg-amber-500/20 text-amber-700 hover:bg-amber-500/30">
-              <Trophy className="h-3 w-3 mr-1" /> Raffles & Prizes
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Sweepstakes
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Enter sweepstakes, buy raffle tickets, and win prizes. Every
-              ticket supports the CashGlitch mission while giving you a chance
-              at amazing prizes.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Sweepstakes"
+        description="Enter sweepstakes, buy raffle tickets, and win prizes. Every ticket supports the CashGlitch mission while giving you a chance at amazing prizes."
+        badgeText="Raffles & Prizes"
+        badgeIcon={Trophy}
+        colorScheme="amber"
+      />
 
       {sweepstakes.length === 0 ? (
         <section className="container mx-auto px-4 py-16 text-center">
@@ -149,12 +139,10 @@ export default function SweepstakesPage() {
           {/* Featured Sweepstakes */}
           {featured.length > 0 && (
             <section className="container mx-auto px-4 py-16">
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-2">Featured Sweepstakes</h2>
-                <p className="text-muted-foreground">
-                  Hot prizes with big payoffs
-                </p>
-              </div>
+              <SectionHeader
+                title="Featured Sweepstakes"
+                subtitle="Hot prizes with big payoffs"
+              />
 
               <div className="grid md:grid-cols-2 gap-6 mb-16">
                 {featured.map((item) => (
@@ -177,12 +165,10 @@ export default function SweepstakesPage() {
           {regular.length > 0 && (
             <section className={`container mx-auto px-4 ${featured.length > 0 ? "pb-16" : "py-16"}`}>
               {featured.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold mb-2">All Sweepstakes</h2>
-                  <p className="text-muted-foreground">
-                    Browse all available raffles
-                  </p>
-                </div>
+                <SectionHeader
+                  title="All Sweepstakes"
+                  subtitle="Browse all available raffles"
+                />
               )}
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

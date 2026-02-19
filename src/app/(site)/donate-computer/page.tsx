@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Laptop,
@@ -21,7 +19,8 @@ import {
   Package,
   Loader2,
 } from "lucide-react";
-import type { PageContent, PageItem } from "@/lib/shared";
+import { usePageData } from "@/hooks/usePageData";
+import { PageHero, CTASection } from "@/components/shared";
 
 const donationProcess = [
   {
@@ -67,27 +66,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export default function DonateComputerPage() {
-  const [pageContent, setPageContent] = useState<PageContent | null>(null);
-  const [items, setItems] = useState<PageItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [contentRes, itemsRes] = await Promise.all([
-          fetch("/api/page-content?slug=donate-computer"),
-          fetch("/api/page-items?slug=donate-computer"),
-        ]);
-        if (contentRes.ok) setPageContent(await contentRes.json());
-        if (itemsRes.ok) setItems(await itemsRes.json());
-      } catch (error) {
-        console.error("Failed to load page data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+  const { pageContent, items, loading } = usePageData("donate-computer");
 
   if (loading) {
     return (
@@ -99,24 +78,13 @@ export default function DonateComputerPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-orange-500/10 border-b">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <Badge className="mb-4 bg-orange-500/20 text-orange-700 hover:bg-orange-500/30">
-              <Laptop className="h-3 w-3 mr-1" />{" "}
-              {pageContent?.heroBadgeText || "Give Back"}
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {pageContent?.heroTitle || "Donate a Computer"}
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {pageContent?.heroDescription ||
-                "Your old laptop or desktop could be someone's gateway to education, employment, and opportunity."}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title={pageContent?.heroTitle || "Donate a Computer"}
+        description={pageContent?.heroDescription || "Your old laptop or desktop could be someone's gateway to education, employment, and opportunity."}
+        badgeText={pageContent?.heroBadgeText || "Give Back"}
+        badgeIcon={Laptop}
+        colorScheme="orange"
+      />
 
       {/* Impact Stats */}
       <section className="border-b bg-muted/30">
@@ -377,24 +345,12 @@ export default function DonateComputerPage() {
         </div>
       </section>
 
-      {/* CTA for Recipients */}
-      <section className="bg-muted/30 border-t">
-        <div className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-bold mb-4">Need a Computer?</h2>
-            <p className="text-muted-foreground mb-6">
-              If you&apos;re in need of a computer for education, job searching,
-              or personal development, we may be able to help.
-            </p>
-            <Button asChild>
-              <Link href="/get-computer">
-                Apply for a Free Computer{" "}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <CTASection
+        title="Need a Computer?"
+        description="If you're in need of a computer for education, job searching, or personal development, we may be able to help."
+        buttonText="Apply for a Free Computer"
+        buttonHref="/get-computer"
+      />
     </div>
   );
 }

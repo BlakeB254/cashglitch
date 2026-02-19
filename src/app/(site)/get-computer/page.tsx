@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Monitor,
@@ -22,7 +20,8 @@ import {
   HelpCircle,
   Loader2,
 } from "lucide-react";
-import type { PageContent, PageItem } from "@/lib/shared";
+import { usePageData } from "@/hooks/usePageData";
+import { PageHero } from "@/components/shared";
 
 const applicationSteps = [
   {
@@ -87,27 +86,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export default function GetComputerPage() {
-  const [pageContent, setPageContent] = useState<PageContent | null>(null);
-  const [items, setItems] = useState<PageItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [contentRes, itemsRes] = await Promise.all([
-          fetch("/api/page-content?slug=get-computer"),
-          fetch("/api/page-items?slug=get-computer"),
-        ]);
-        if (contentRes.ok) setPageContent(await contentRes.json());
-        if (itemsRes.ok) setItems(await itemsRes.json());
-      } catch (error) {
-        console.error("Failed to load page data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+  const { pageContent, items, loading } = usePageData("get-computer");
 
   if (loading) {
     return (
@@ -119,24 +98,13 @@ export default function GetComputerPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-teal-500/10 border-b">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <Badge className="mb-4 bg-teal-500/20 text-teal-700 hover:bg-teal-500/30">
-              <Monitor className="h-3 w-3 mr-1" />{" "}
-              {pageContent?.heroBadgeText || "Apply Now"}
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {pageContent?.heroTitle || "Get a Free Computer"}
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {pageContent?.heroDescription ||
-                "Technology should never be a barrier to opportunity. If you need a computer for school, work, or personal development, we may be able to help."}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title={pageContent?.heroTitle || "Get a Free Computer"}
+        description={pageContent?.heroDescription || "Technology should never be a barrier to opportunity. If you need a computer for school, work, or personal development, we may be able to help."}
+        badgeText={pageContent?.heroBadgeText || "Apply Now"}
+        badgeIcon={Monitor}
+        colorScheme="teal"
+      />
 
       {/* Eligibility */}
       {items.length > 0 && (

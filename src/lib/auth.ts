@@ -133,8 +133,8 @@ export function getMagicLinkUrl(token: string): string {
   return `${baseUrl}/verify?token=${token}`;
 }
 
-// Check if email is the admin email
+// Check if email is an admin email (supports comma-separated list)
 export function isAdminEmail(email: string): boolean {
-  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  return email.trim().toLowerCase() === adminEmail;
+  const adminEmails = process.env.ADMIN_EMAIL?.split(",").map(e => e.trim().toLowerCase()) ?? [];
+  return adminEmails.includes(email.trim().toLowerCase());
 }
