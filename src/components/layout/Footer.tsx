@@ -28,8 +28,8 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
               <DollarSign className="h-8 w-8 text-primary glitch-main" />
-              <span className="text-xl font-matrix text-glow">
-                CASH<span className="text-primary">GLITCH</span>
+              <span className="text-xl font-matrix">
+                <span className="text-white/90">CASH</span><span className="text-primary text-glow">GLITCH</span>
               </span>
             </Link>
             <p className="text-sm text-primary/70 leading-relaxed font-tech">

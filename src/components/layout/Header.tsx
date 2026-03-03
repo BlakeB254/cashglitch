@@ -97,11 +97,11 @@ export function Header() {
             alt="Cash Glitch"
             width={48}
             height={48}
-            className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]"
+            className="w-10 h-10 object-contain brightness-150 drop-shadow-[0_0_12px_rgba(168,85,247,1)] drop-shadow-[0_0_25px_rgba(168,85,247,0.5)]"
             priority
           />
-          <span className="text-lg font-matrix tracking-wider text-glow hidden sm:inline">
-            CASH<span className="text-primary">GLITCH</span>
+          <span className="text-lg font-matrix tracking-wider hidden sm:inline">
+            <span className="text-white/90">CASH</span><span className="text-primary text-glow">GLITCH</span>
           </span>
         </Link>
 
@@ -203,7 +203,7 @@ export function Header() {
                     alt="Cash Glitch"
                     width={32}
                     height={32}
-                    className="w-8 h-8 object-contain"
+                    className="w-8 h-8 object-contain brightness-150 drop-shadow-[0_0_10px_rgba(168,85,247,1)]"
                   />
                   CASHGLITCH
                 </SheetTitle>

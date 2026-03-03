@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { MatrixRain } from "@/components/MatrixRain";
 import { AccessGate } from "@/components/AccessGate";
 
@@ -109,7 +110,10 @@ export default function RootLayout({
         <AccessGate>
           <MatrixRain />
           <Header />
-          <div className="relative z-20">{children}</div>
+          <div className="relative z-20 min-h-screen">{children}</div>
+          <div className="relative z-20">
+            <Footer />
+          </div>
         </AccessGate>
       </body>
     </html>
