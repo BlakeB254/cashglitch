@@ -8,8 +8,10 @@ import {
   Briefcase,
   Loader2,
 } from "lucide-react";
+import { useState } from "react";
+import type { PageItem } from "@/lib/shared";
 import { usePageData } from "@/hooks/usePageData";
-import { PageHero, ContentCard, SectionHeader, CTASection } from "@/components/shared";
+import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } from "@/components/shared";
 
 const programTypes = [
   { icon: GraduationCap, label: "Study Abroad" },
@@ -20,6 +22,7 @@ const programTypes = [
 
 export default function FreeTravelPage() {
   const { pageContent, featuredItems, regularItems, loading } = usePageData("free-travel");
+  const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
 
   if (loading) {
     return (
@@ -71,6 +74,7 @@ export default function FreeTravelPage() {
                   variant="featured"
                   colorScheme="sky"
                   websiteLabel="Apply"
+                  onClick={() => setSelectedItem(program)}
                 />
               ))}
             </div>
@@ -90,6 +94,7 @@ export default function FreeTravelPage() {
                   item={program}
                   colorScheme="sky"
                   websiteLabel="Learn More"
+                  onClick={() => setSelectedItem(program)}
                 />
               ))}
             </div>
@@ -106,6 +111,14 @@ export default function FreeTravelPage() {
         buttonText={pageContent?.ctaButtonText || "Browse Sweepstakes"}
         buttonHref={pageContent?.ctaButtonLink || "/sweepstakes"}
       />
+      {selectedItem && (
+        <ItemDetailModal
+          item={selectedItem}
+          colorScheme="sky"
+          websiteLabel="Apply"
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
     </div>
   );
 }

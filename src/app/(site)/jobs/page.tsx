@@ -11,8 +11,10 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import type { PageItem } from "@/lib/shared";
 import { usePageData } from "@/hooks/usePageData";
-import { PageHero, ContentCard, SectionHeader, CTASection } from "@/components/shared";
+import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } from "@/components/shared";
 
 const jobBoards = [
   { name: "Idealist", description: "Jobs at nonprofits and social impact organizations", link: "#" },
@@ -23,6 +25,7 @@ const jobBoards = [
 
 export default function JobsPage() {
   const { pageContent, featuredItems, regularItems, loading } = usePageData("jobs");
+  const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
 
   if (loading) {
     return (
@@ -78,6 +81,7 @@ export default function JobsPage() {
                   variant="featured"
                   colorScheme="emerald"
                   websiteLabel="Apply Now"
+                  onClick={() => setSelectedItem(job)}
                 />
               ))}
             </div>
@@ -97,6 +101,7 @@ export default function JobsPage() {
                   item={job}
                   colorScheme="emerald"
                   websiteLabel="View"
+                  onClick={() => setSelectedItem(job)}
                 />
               ))}
             </div>
@@ -132,6 +137,14 @@ export default function JobsPage() {
         buttonText={pageContent?.ctaButtonText || "Partner With Us"}
         buttonHref={pageContent?.ctaButtonLink || "/partner"}
       />
+      {selectedItem && (
+        <ItemDetailModal
+          item={selectedItem}
+          colorScheme="emerald"
+          websiteLabel="Apply Now"
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
     </div>
   );
 }

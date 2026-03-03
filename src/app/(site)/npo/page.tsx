@@ -2,11 +2,14 @@
 
 import { Heart } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import type { PageItem } from "@/lib/shared";
 import { usePageData } from "@/hooks/usePageData";
-import { PageHero, ContentCard, SectionHeader, CTASection } from "@/components/shared";
+import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } from "@/components/shared";
 
 export default function NPOPage() {
   const { pageContent, featuredItems, regularItems, loading } = usePageData("npo");
+  const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
 
   if (loading) {
     return (
@@ -44,6 +47,7 @@ export default function NPOPage() {
                   variant="featured"
                   colorScheme="rose"
                   showCategory={false}
+                  onClick={() => setSelectedItem(org)}
                 />
               ))}
             </div>
@@ -63,6 +67,7 @@ export default function NPOPage() {
                   item={org}
                   colorScheme="rose"
                   showCategory={false}
+                  onClick={() => setSelectedItem(org)}
                 />
               ))}
             </div>
@@ -79,6 +84,13 @@ export default function NPOPage() {
         buttonText={pageContent?.ctaButtonText || "Submit an Organization"}
         buttonHref={pageContent?.ctaButtonLink || "/contact"}
       />
+      {selectedItem && (
+        <ItemDetailModal
+          item={selectedItem}
+          colorScheme="rose"
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
     </div>
   );
 }
