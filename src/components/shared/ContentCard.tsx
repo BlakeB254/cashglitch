@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, MapPin, Clock, DollarSign, Calendar } from "lucide-react";
+import { ExternalLink, MapPin, Clock, DollarSign, Calendar, Play } from "lucide-react";
 import type { PageItem } from "@/lib/shared";
+import { getVideoInfo } from "@/lib/video";
 import type { ColorScheme } from "./PageHero";
 
 const borderColorMap: Record<ColorScheme, string> = {
@@ -45,6 +46,7 @@ interface ContentCardProps {
   showTags?: boolean;
   showWebsite?: boolean;
   websiteLabel?: string;
+  onClick?: () => void;
 }
 
 export function ContentCard({
@@ -58,20 +60,41 @@ export function ContentCard({
   showTags = true,
   showWebsite = true,
   websiteLabel = "Visit",
+  onClick,
 }: ContentCardProps) {
   const isFeatured = variant === "featured";
 
   return (
     <Card
-      className={`overflow-hidden transition-shadow hover:shadow-lg ${
+      className={`overflow-hidden transition-shadow hover:shadow-lg bg-[#0f0a1a] ${
         isFeatured ? `border-2 ${borderColorMap[colorScheme]}` : ""
-      }`}
+      } ${onClick ? "cursor-pointer" : ""}`}
+      onClick={onClick}
     >
-      {item.imageUrl && (
-        <div className="relative w-full h-40 overflow-hidden">
-          <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
-        </div>
-      )}
+      {(() => {
+        const videoInfo = item.videoUrl ? getVideoInfo(item.videoUrl) : null;
+        const thumbnailUrl = videoInfo?.thumbnailUrl || item.imageUrl;
+        const hasVideo = !!item.videoUrl;
+
+        if (!thumbnailUrl && !hasVideo) return null;
+
+        return (
+          <div className="relative w-full h-40 overflow-hidden">
+            {thumbnailUrl ? (
+              <Image src={thumbnailUrl} alt={item.title} fill className="object-cover" />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5" />
+            )}
+            {hasVideo && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">
+                  <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
       <CardHeader>
         <div className="flex items-start justify-between gap-2 mb-1">
           <div className="flex flex-wrap gap-2">
