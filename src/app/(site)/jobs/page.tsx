@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { PageItem } from "@/lib/shared";
 import { usePageData } from "@/hooks/usePageData";
 import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } from "@/components/shared";
@@ -26,6 +26,7 @@ const jobBoards = [
 export default function JobsPage() {
   const { pageContent, featuredItems, regularItems, loading } = usePageData("jobs");
   const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
+  const closeModal = useCallback(() => setSelectedItem(null), []);
 
   if (loading) {
     return (
@@ -142,7 +143,7 @@ export default function JobsPage() {
           item={selectedItem}
           colorScheme="emerald"
           websiteLabel="Apply Now"
-          onClose={() => setSelectedItem(null)}
+          onClose={closeModal}
         />
       )}
     </div>

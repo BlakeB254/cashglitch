@@ -8,7 +8,7 @@ import {
   Briefcase,
   Loader2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { PageItem } from "@/lib/shared";
 import { usePageData } from "@/hooks/usePageData";
 import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } from "@/components/shared";
@@ -23,6 +23,7 @@ const programTypes = [
 export default function FreeTravelPage() {
   const { pageContent, featuredItems, regularItems, loading } = usePageData("free-travel");
   const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
+  const closeModal = useCallback(() => setSelectedItem(null), []);
 
   if (loading) {
     return (
@@ -116,7 +117,7 @@ export default function FreeTravelPage() {
           item={selectedItem}
           colorScheme="sky"
           websiteLabel="Apply"
-          onClose={() => setSelectedItem(null)}
+          onClose={closeModal}
         />
       )}
     </div>

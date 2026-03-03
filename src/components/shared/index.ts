@@ -4,3 +4,4 @@ export { SectionHeader } from "./SectionHeader";
 export { CTASection } from "./CTASection";
 export { StatCard } from "./StatCard";
 export { ItemDetailModal } from "./ItemDetailModal";
+export { ValueIcon } from "./ValueIcon";

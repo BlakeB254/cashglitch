@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { PageContent, PageItem } from "@/lib/shared";
 
 interface UsePageDataReturn {
@@ -37,8 +37,8 @@ export function usePageData(slug: string): UsePageDataReturn {
     fetchData();
   }, [slug]);
 
-  const featuredItems = items.filter((item) => item.isFeatured);
-  const regularItems = items.filter((item) => !item.isFeatured);
+  const featuredItems = useMemo(() => items.filter((item) => item.isFeatured), [items]);
+  const regularItems = useMemo(() => items.filter((item) => !item.isFeatured), [items]);
 
   return { pageContent, items, featuredItems, regularItems, loading, error };
 }

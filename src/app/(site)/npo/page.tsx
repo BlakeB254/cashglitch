@@ -2,7 +2,7 @@
 
 import { Heart } from "lucide-react";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { PageItem } from "@/lib/shared";
 import { usePageData } from "@/hooks/usePageData";
 import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } from "@/components/shared";
@@ -10,6 +10,7 @@ import { PageHero, ContentCard, SectionHeader, CTASection, ItemDetailModal } fro
 export default function NPOPage() {
   const { pageContent, featuredItems, regularItems, loading } = usePageData("npo");
   const [selectedItem, setSelectedItem] = useState<PageItem | null>(null);
+  const closeModal = useCallback(() => setSelectedItem(null), []);
 
   if (loading) {
     return (
@@ -88,7 +89,7 @@ export default function NPOPage() {
         <ItemDetailModal
           item={selectedItem}
           colorScheme="rose"
-          onClose={() => setSelectedItem(null)}
+          onClose={closeModal}
         />
       )}
     </div>

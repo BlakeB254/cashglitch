@@ -8,10 +8,11 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, MapPin, Clock, DollarSign, Calendar, Play } from "lucide-react";
+import { ExternalLink, MapPin, Clock, Play } from "lucide-react";
 import type { PageItem } from "@/lib/shared";
-import { getVideoInfo } from "@/lib/video";
-import type { ColorScheme } from "./PageHero";
+import { getVideoThumbnail } from "@/lib/video";
+import { type ColorScheme, badgeColorMap } from "./PageHero";
+import { ValueIcon } from "./ValueIcon";
 
 const borderColorMap: Record<ColorScheme, string> = {
   rose:    "border-rose-200",
@@ -22,17 +23,6 @@ const borderColorMap: Record<ColorScheme, string> = {
   blue:    "border-blue-200",
   orange:  "border-orange-200",
   teal:    "border-teal-200",
-};
-
-const badgeColorMap: Record<ColorScheme, string> = {
-  rose:    "bg-rose-100 text-rose-800",
-  emerald: "bg-emerald-100 text-emerald-800",
-  sky:     "bg-sky-100 text-sky-800",
-  amber:   "bg-amber-100 text-amber-800",
-  purple:  "bg-purple-100 text-purple-800",
-  blue:    "bg-blue-100 text-blue-800",
-  orange:  "bg-orange-100 text-orange-800",
-  teal:    "bg-teal-100 text-teal-800",
 };
 
 interface ContentCardProps {
@@ -63,38 +53,33 @@ export function ContentCard({
   onClick,
 }: ContentCardProps) {
   const isFeatured = variant === "featured";
+  const hasVideo = !!item.videoUrl;
+  const thumbnailUrl = getVideoThumbnail(item.videoUrl, item.imageUrl) || item.imageUrl;
+  const showThumbnail = thumbnailUrl || hasVideo;
 
   return (
     <Card
-      className={`overflow-hidden transition-shadow hover:shadow-lg bg-[#0f0a1a] ${
+      className={`overflow-hidden transition-shadow hover:shadow-lg bg-background ${
         isFeatured ? `border-2 ${borderColorMap[colorScheme]}` : ""
       } ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}
     >
-      {(() => {
-        const videoInfo = item.videoUrl ? getVideoInfo(item.videoUrl) : null;
-        const thumbnailUrl = videoInfo?.thumbnailUrl || item.imageUrl;
-        const hasVideo = !!item.videoUrl;
-
-        if (!thumbnailUrl && !hasVideo) return null;
-
-        return (
-          <div className="relative w-full h-40 overflow-hidden">
-            {thumbnailUrl ? (
-              <Image src={thumbnailUrl} alt={item.title} fill className="object-cover" />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5" />
-            )}
-            {hasVideo && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">
-                  <Play className="w-5 h-5 text-white fill-white ml-0.5" />
-                </div>
+      {showThumbnail && (
+        <div className="relative w-full h-40 overflow-hidden">
+          {thumbnailUrl ? (
+            <Image src={thumbnailUrl} alt={item.title} fill className="object-cover" />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5" />
+          )}
+          {hasVideo && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+              <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">
+                <Play className="w-5 h-5 text-white fill-white ml-0.5" />
               </div>
-            )}
-          </div>
-        );
-      })()}
+            </div>
+          )}
+        </div>
+      )}
       <CardHeader>
         <div className="flex items-start justify-between gap-2 mb-1">
           <div className="flex flex-wrap gap-2">
@@ -137,11 +122,7 @@ export function ContentCard({
           )}
           {showValue && item.value && (
             <span className="flex items-center gap-1 font-medium text-primary">
-              {item.value.startsWith("$") || item.value.startsWith("Up to") ? (
-                <DollarSign className="h-4 w-4" />
-              ) : (
-                <Calendar className="h-4 w-4" />
-              )}
+              <ValueIcon value={item.value} />
               {item.value}
             </span>
           )}

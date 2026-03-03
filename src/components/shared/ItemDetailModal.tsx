@@ -1,23 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
-import { X, ExternalLink, MapPin, Clock, DollarSign, Calendar } from "lucide-react";
+import { useEffect, useMemo } from "react";
+import { X, ExternalLink, MapPin, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { PageItem } from "@/lib/shared";
 import { getVideoInfo } from "@/lib/video";
-import type { ColorScheme } from "./PageHero";
-
-const badgeColorMap: Record<ColorScheme, string> = {
-  rose: "bg-rose-100 text-rose-800",
-  emerald: "bg-emerald-100 text-emerald-800",
-  sky: "bg-sky-100 text-sky-800",
-  amber: "bg-amber-100 text-amber-800",
-  purple: "bg-purple-100 text-purple-800",
-  blue: "bg-blue-100 text-blue-800",
-  orange: "bg-orange-100 text-orange-800",
-  teal: "bg-teal-100 text-teal-800",
-};
+import { type ColorScheme, badgeColorMap } from "./PageHero";
+import { ValueIcon } from "./ValueIcon";
 
 interface ItemDetailModalProps {
   item: PageItem;
@@ -32,7 +22,10 @@ export function ItemDetailModal({
   onClose,
   websiteLabel = "Visit Website",
 }: ItemDetailModalProps) {
-  const videoInfo = item.videoUrl ? getVideoInfo(item.videoUrl) : null;
+  const videoInfo = useMemo(
+    () => (item.videoUrl ? getVideoInfo(item.videoUrl) : null),
+    [item.videoUrl]
+  );
 
   // Close on Escape key
   useEffect(() => {
@@ -45,9 +38,10 @@ export function ItemDetailModal({
 
   // Prevent body scroll when modal is open
   useEffect(() => {
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prev;
     };
   }, []);
 
@@ -58,7 +52,7 @@ export function ItemDetailModal({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-[#0f0a1a] border border-primary/30 w-full max-w-2xl my-8 rounded-lg overflow-hidden">
+      <div className="bg-background border border-primary/30 w-full max-w-2xl my-8 rounded-lg overflow-hidden">
         {/* Close button */}
         <div className="flex justify-end p-3">
           <button
@@ -121,11 +115,7 @@ export function ItemDetailModal({
             )}
             {item.value && (
               <span className="flex items-center gap-1 font-medium text-primary">
-                {item.value.startsWith("$") || item.value.startsWith("Up to") ? (
-                  <DollarSign className="h-4 w-4" />
-                ) : (
-                  <Calendar className="h-4 w-4" />
-                )}
+                <ValueIcon value={item.value} />
                 {item.value}
               </span>
             )}
