@@ -7,18 +7,18 @@ interface StatCardProps {
 
 export function StatCard({ title, value, icon: Icon, subtitle }: StatCardProps) {
   return (
-    <div className="bg-primary/5 border border-primary/20 p-6 rounded">
+    <div className="bg-primary/10 border border-primary/25 p-6 rounded">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-primary/60 font-tech uppercase tracking-wider">
+          <p className="text-xs text-primary/70 font-tech uppercase tracking-wider">
             {title}
           </p>
           <p className="text-3xl font-matrix text-primary mt-2">{value}</p>
           {subtitle && (
-            <p className="text-xs text-primary/40 font-tech mt-1">{subtitle}</p>
+            <p className="text-xs text-primary/50 font-tech mt-1">{subtitle}</p>
           )}
         </div>
-        <Icon className="w-8 h-8 text-primary/30" />
+        <Icon className="w-8 h-8 text-primary/50" />
       </div>
     </div>
   );

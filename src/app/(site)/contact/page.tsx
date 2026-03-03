@@ -49,7 +49,7 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="bg-primary/5 border-b">
+      <section className="bg-primary/15 border-b border-primary/20">
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-3xl mx-auto text-center">
             <Badge className="mb-4">Contact</Badge>
@@ -200,7 +200,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ CTA */}
-      <section className="bg-muted/30 border-t">
+      <section className="bg-secondary/50 border-t">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl font-bold mb-4">

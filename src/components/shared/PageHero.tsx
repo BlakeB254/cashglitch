@@ -4,25 +4,25 @@ import type { LucideIcon } from "lucide-react";
 export type ColorScheme = "rose" | "emerald" | "sky" | "amber" | "purple" | "blue" | "orange" | "teal";
 
 export const badgeColorMap: Record<ColorScheme, string> = {
-  rose:    "bg-rose-100 text-rose-800",
-  emerald: "bg-emerald-100 text-emerald-800",
-  sky:     "bg-sky-100 text-sky-800",
-  amber:   "bg-amber-100 text-amber-800",
-  purple:  "bg-purple-100 text-purple-800",
-  blue:    "bg-blue-100 text-blue-800",
-  orange:  "bg-orange-100 text-orange-800",
-  teal:    "bg-teal-100 text-teal-800",
+  rose:    "bg-rose-900/40 text-rose-300",
+  emerald: "bg-emerald-900/40 text-emerald-300",
+  sky:     "bg-sky-900/40 text-sky-300",
+  amber:   "bg-amber-900/40 text-amber-300",
+  purple:  "bg-purple-900/40 text-purple-300",
+  blue:    "bg-blue-900/40 text-blue-300",
+  orange:  "bg-orange-900/40 text-orange-300",
+  teal:    "bg-teal-900/40 text-teal-300",
 };
 
 const colorMap: Record<ColorScheme, { bg: string; badge: string; text: string; hover: string }> = {
-  rose:    { bg: "bg-rose-500/10",    badge: "bg-rose-500/20",    text: "text-rose-700",    hover: "hover:bg-rose-500/30" },
-  emerald: { bg: "bg-emerald-500/10", badge: "bg-emerald-500/20", text: "text-emerald-700", hover: "hover:bg-emerald-500/30" },
-  sky:     { bg: "bg-sky-500/10",     badge: "bg-sky-500/20",     text: "text-sky-700",     hover: "hover:bg-sky-500/30" },
-  amber:   { bg: "bg-amber-500/10",   badge: "bg-amber-500/20",   text: "text-amber-700",   hover: "hover:bg-amber-500/30" },
-  purple:  { bg: "bg-purple-500/10",  badge: "bg-purple-500/20",  text: "text-purple-700",  hover: "hover:bg-purple-500/30" },
-  blue:    { bg: "bg-blue-500/10",    badge: "bg-blue-500/20",    text: "text-blue-700",    hover: "hover:bg-blue-500/30" },
-  orange:  { bg: "bg-orange-500/10",  badge: "bg-orange-500/20",  text: "text-orange-700",  hover: "hover:bg-orange-500/30" },
-  teal:    { bg: "bg-teal-500/10",    badge: "bg-teal-500/20",    text: "text-teal-700",    hover: "hover:bg-teal-500/30" },
+  rose:    { bg: "bg-rose-500/15",    badge: "bg-rose-500/25",    text: "text-rose-300",    hover: "hover:bg-rose-500/35" },
+  emerald: { bg: "bg-emerald-500/15", badge: "bg-emerald-500/25", text: "text-emerald-300", hover: "hover:bg-emerald-500/35" },
+  sky:     { bg: "bg-sky-500/15",     badge: "bg-sky-500/25",     text: "text-sky-300",     hover: "hover:bg-sky-500/35" },
+  amber:   { bg: "bg-amber-500/15",   badge: "bg-amber-500/25",   text: "text-amber-300",   hover: "hover:bg-amber-500/35" },
+  purple:  { bg: "bg-purple-500/15",  badge: "bg-purple-500/25",  text: "text-purple-300",  hover: "hover:bg-purple-500/35" },
+  blue:    { bg: "bg-blue-500/15",    badge: "bg-blue-500/25",    text: "text-blue-300",    hover: "hover:bg-blue-500/35" },
+  orange:  { bg: "bg-orange-500/15",  badge: "bg-orange-500/25",  text: "text-orange-300",  hover: "hover:bg-orange-500/35" },
+  teal:    { bg: "bg-teal-500/15",    badge: "bg-teal-500/25",    text: "text-teal-300",    hover: "hover:bg-teal-500/35" },
 };
 
 interface PageHeroProps {

@@ -70,11 +70,12 @@ export default function BlogPage() {
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="block bg-primary/5 border border-primary/20 hover:border-primary/40 transition-all group overflow-hidden"
+                className="block bg-primary/10 border border-primary/25 hover:border-primary/50 transition-all group overflow-hidden hover:shadow-lg hover:shadow-primary/10"
               >
                 {post.imageUrl && (
                   <div className="relative w-full h-48 overflow-hidden">
                     <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f0a1a] via-transparent to-transparent opacity-60" />
                   </div>
                 )}
                 <div className="p-6">
@@ -82,11 +83,11 @@ export default function BlogPage() {
                   {post.title}
                 </h2>
                 {post.excerpt && (
-                  <p className="text-primary/60 font-tech text-sm mb-4">
+                  <p className="text-primary/70 font-tech text-sm mb-4">
                     {post.excerpt}
                   </p>
                 )}
-                <div className="flex items-center gap-2 text-xs text-primary/40 font-tech">
+                <div className="flex items-center gap-2 text-xs text-primary/50 font-tech">
                   <Calendar className="w-4 h-4" />
                   {new Date(post.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",

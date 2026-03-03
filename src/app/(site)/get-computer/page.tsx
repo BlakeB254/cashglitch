@@ -138,7 +138,7 @@ export default function GetComputerPage() {
             })}
           </div>
 
-          <Card className="p-6 bg-muted/50">
+          <Card className="p-6 bg-secondary/60 border-primary/20">
             <div className="flex items-start gap-4">
               <CheckCircle className="h-6 w-6 text-primary shrink-0 mt-1" />
               <div>
@@ -158,7 +158,7 @@ export default function GetComputerPage() {
       )}
 
       {/* Application Process */}
-      <section className="bg-muted/30 border-y">
+      <section className="bg-secondary/50 border-y">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Application Process</h2>
@@ -342,7 +342,7 @@ export default function GetComputerPage() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-muted/30 border-t">
+      <section className="bg-secondary/50 border-t">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">

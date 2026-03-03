@@ -50,7 +50,7 @@ export default function JobsPage() {
       />
 
       {/* Filter Bar */}
-      <section className="border-b bg-muted/30">
+      <section className="border-b border-primary/20 bg-secondary/50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex gap-2 overflow-x-auto pb-2">
             <Button variant="default" size="sm">All Jobs</Button>

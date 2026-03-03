@@ -87,7 +87,7 @@ export default function DonateComputerPage() {
       />
 
       {/* Impact Stats */}
-      <section className="border-b bg-muted/30">
+      <section className="border-b bg-secondary/50">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {impactStats.map((stat) => (
@@ -187,7 +187,7 @@ export default function DonateComputerPage() {
       )}
 
       {/* Process */}
-      <section className="bg-muted/30 border-y">
+      <section className="bg-secondary/50 border-y">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">How It Works</h2>

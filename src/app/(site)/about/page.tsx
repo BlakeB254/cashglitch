@@ -57,7 +57,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="bg-primary/5 border-b">
+      <section className="bg-primary/15 border-b border-primary/20">
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-3xl mx-auto text-center">
             <Badge className="mb-4">About Us</Badge>
@@ -102,7 +102,7 @@ export default function AboutPage() {
               change. And we're just getting started.
             </p>
           </div>
-          <Card className="p-8 bg-muted/50">
+          <Card className="p-8 bg-secondary/60 border-primary/20">
             <h3 className="text-xl font-bold mb-6">Our Impact So Far</h3>
             <div className="space-y-4">
               {[
@@ -123,7 +123,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="bg-muted/30 border-y">
+      <section className="bg-secondary/50 border-y">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4">
@@ -180,7 +180,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="bg-muted/30 border-y">
+      <section className="bg-secondary/50 border-y">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4">

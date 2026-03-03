@@ -127,8 +127,9 @@ export default function BlogPostPage({
 
         {/* Hero Image */}
         {post.imageUrl && (
-          <div className="relative w-full h-64 md:h-80 overflow-hidden mb-8 border border-primary/20">
+          <div className="relative w-full h-64 md:h-80 overflow-hidden mb-8 border border-primary/25 rounded-sm">
             <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0f0a1a] via-[#0f0a1a]/20 to-transparent" />
           </div>
         )}
 
@@ -138,7 +139,7 @@ export default function BlogPostPage({
             <h1 className="text-3xl md:text-4xl font-matrix text-primary text-glow mb-4">
               {post.title}
             </h1>
-            <div className="flex items-center gap-2 text-sm text-primary/40 font-tech">
+            <div className="flex items-center gap-2 text-sm text-primary/60 font-tech">
               <Calendar className="w-4 h-4" />
               {new Date(post.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -150,7 +151,7 @@ export default function BlogPostPage({
 
           {/* Post Content - sanitized with DOMPurify */}
           <div
-            className="text-primary/80 font-tech leading-relaxed prose-invert"
+            className="text-foreground/90 font-tech leading-relaxed"
             dangerouslySetInnerHTML={{
               __html: `<p class="my-4">${sanitizedContent}</p>`,
             }}

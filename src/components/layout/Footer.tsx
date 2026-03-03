@@ -32,11 +32,11 @@ export function Footer() {
                 CASH<span className="text-primary">GLITCH</span>
               </span>
             </Link>
-            <p className="text-sm text-primary/60 leading-relaxed font-tech">
+            <p className="text-sm text-primary/70 leading-relaxed font-tech">
               Organizing a broken system. We help you fix the glitches to unlock
               abundance, resources, and opportunities.
             </p>
-            <div className="flex items-center gap-2 text-sm text-primary/60">
+            <div className="flex items-center gap-2 text-sm text-primary/70">
               <Mail className="h-4 w-4" />
               <a
                 href="mailto:hello@cashglitch.org"
@@ -55,7 +55,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-primary/60 hover:text-primary transition-colors font-tech"
+                    className="text-sm text-primary/70 hover:text-primary transition-colors font-tech"
                   >
                     &gt; {link.label}
                   </Link>
@@ -72,7 +72,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-primary/60 hover:text-primary transition-colors font-tech"
+                    className="text-sm text-primary/70 hover:text-primary transition-colors font-tech"
                   >
                     &gt; {link.label}
                   </Link>
@@ -89,7 +89,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-primary/60 hover:text-primary transition-colors font-tech"
+                    className="text-sm text-primary/70 hover:text-primary transition-colors font-tech"
                   >
                     &gt; {link.label}
                   </Link>
@@ -100,7 +100,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-primary/20 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary/40 font-tech">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary/60 font-tech">
             <p>
               &copy; {new Date().getFullYear()} CASHGLITCH.ORG // ALL RIGHTS
               EXPLOITED

@@ -70,7 +70,7 @@ export default function PartnerPage() {
       />
 
       {/* Stats */}
-      <section className="border-b bg-muted/30">
+      <section className="border-b bg-secondary/50">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat) => (
@@ -101,9 +101,9 @@ export default function PartnerPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {items.map((type) => {
               const colorMap: Record<string, string> = {
-                "Community Partner": "bg-rose-500/10 text-rose-600",
-                "Corporate Sponsor": "bg-violet-500/10 text-violet-600",
-                Advertiser: "bg-amber-500/10 text-amber-600",
+                "Community Partner": "bg-rose-500/20 text-rose-300",
+                "Corporate Sponsor": "bg-violet-500/20 text-violet-300",
+                Advertiser: "bg-amber-500/20 text-amber-300",
               };
               const color =
                 colorMap[type.title] || "bg-primary/10 text-primary";
@@ -154,7 +154,7 @@ export default function PartnerPage() {
       )}
 
       {/* Why Partner */}
-      <section className="bg-muted/30 border-y">
+      <section className="bg-secondary/50 border-y">
         <div className="container mx-auto px-4 py-16">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -280,7 +280,7 @@ export default function PartnerPage() {
       </section>
 
       {/* Contact CTA */}
-      <section className="bg-muted/30 border-t">
+      <section className="bg-secondary/50 border-t">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl font-bold mb-4">

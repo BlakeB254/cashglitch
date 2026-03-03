@@ -383,3 +383,39 @@
   background: rgba(168, 85, 247, 0.3);
   color: #c4b5fd;
 }
+
+/* Gradient CTA Cards */
+.gradient-hero {
+  background: linear-gradient(135deg, #3b1d6e, #7c3aed, #a855f7);
+}
+
+.gradient-emerald {
+  background: linear-gradient(135deg, #064e3b, #059669, #34d399);
+}
+
+/* Form Input Visibility */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  background: rgba(15, 10, 26, 0.6) !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+  color: #c4b5fd !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(196, 181, 253, 0.35) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
+}
+
+select option {
+  background: #1a0f2e;
+  color: #c4b5fd;
+}

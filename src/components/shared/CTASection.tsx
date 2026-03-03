@@ -11,7 +11,7 @@ interface CTASectionProps {
 
 export function CTASection({ title, description, buttonText, buttonHref }: CTASectionProps) {
   return (
-    <section className="bg-muted/30 border-t">
+    <section className="bg-secondary/50 border-t border-primary/20">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">{title}</h2>

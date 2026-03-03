@@ -15,14 +15,14 @@ import { type ColorScheme, badgeColorMap } from "./PageHero";
 import { ValueIcon } from "./ValueIcon";
 
 const borderColorMap: Record<ColorScheme, string> = {
-  rose:    "border-rose-200",
-  emerald: "border-emerald-200",
-  sky:     "border-sky-200",
-  amber:   "border-amber-200",
-  purple:  "border-purple-200",
-  blue:    "border-blue-200",
-  orange:  "border-orange-200",
-  teal:    "border-teal-200",
+  rose:    "border-rose-500/50",
+  emerald: "border-emerald-500/50",
+  sky:     "border-sky-500/50",
+  amber:   "border-amber-500/50",
+  purple:  "border-purple-500/50",
+  blue:    "border-blue-500/50",
+  orange:  "border-orange-500/50",
+  teal:    "border-teal-500/50",
 };
 
 interface ContentCardProps {
@@ -59,7 +59,7 @@ export function ContentCard({
 
   return (
     <Card
-      className={`overflow-hidden transition-shadow hover:shadow-lg bg-background ${
+      className={`overflow-hidden transition-all hover:shadow-lg hover:shadow-primary/10 bg-background border-primary/20 ${
         isFeatured ? `border-2 ${borderColorMap[colorScheme]}` : ""
       } ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}

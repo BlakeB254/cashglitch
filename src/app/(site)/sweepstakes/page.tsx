@@ -190,7 +190,7 @@ export default function SweepstakesPage() {
       )}
 
       {/* Tips Section */}
-      <section className="bg-muted/30 border-t">
+      <section className="bg-secondary/50 border-t border-primary/20">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-center">
@@ -249,7 +249,7 @@ function SweepstakeCard({
   const soldOut = item.maxTickets !== null && item.ticketsSold >= item.maxTickets;
 
   return (
-    <Card className={featured ? "border-2 border-amber-200" : "hover:shadow-lg transition-shadow"}>
+    <Card className={`bg-background ${featured ? "border-2 border-amber-500/50" : "border-primary/20 hover:shadow-lg hover:shadow-primary/10 transition-all"}`}>
       {item.imageUrl && (
         <div className="relative w-full h-40 overflow-hidden rounded-t-lg">
           <Image
@@ -264,7 +264,7 @@ function SweepstakeCard({
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
             {featured && <Star className="h-4 w-4 text-amber-500 fill-amber-500" />}
-            <Badge className={featured ? "bg-amber-100 text-amber-800" : ""} variant={featured ? "default" : "outline"}>
+            <Badge className={featured ? "bg-amber-900/40 text-amber-300" : ""} variant={featured ? "default" : "outline"}>
               {formatPrice(item.ticketPriceCents)} / ticket
             </Badge>
           </div>
