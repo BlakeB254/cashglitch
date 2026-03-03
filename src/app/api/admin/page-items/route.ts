@@ -30,6 +30,7 @@ function transformPageItem(row: PageItemRow): PageItem {
     value: row.value,
     website: row.website,
     imageUrl: row.image_url,
+    videoUrl: row.video_url,
     tags: parseTags(row.tags as unknown),
     isFeatured: row.is_featured,
     sortOrder: row.sort_order,
@@ -97,6 +98,7 @@ export async function POST(request: NextRequest) {
       value,
       website,
       imageUrl,
+      videoUrl,
       tags,
       isFeatured,
       sortOrder,
@@ -115,10 +117,10 @@ export async function POST(request: NextRequest) {
     const rows = await sql`
       INSERT INTO page_items (
         page_slug, title, description, category, location,
-        deadline, value, website, image_url, tags, is_featured, sort_order, is_active
+        deadline, value, website, image_url, video_url, tags, is_featured, sort_order, is_active
       ) VALUES (
         ${pageSlug}, ${title}, ${description || null}, ${category || null}, ${location || null},
-        ${deadline || null}, ${value || null}, ${website || null}, ${imageUrl || null}, ${tagsJson},
+        ${deadline || null}, ${value || null}, ${website || null}, ${imageUrl || null}, ${videoUrl || null}, ${tagsJson},
         ${isFeatured ?? false}, ${sortOrder ?? 0}, ${isActive ?? true}
       )
       RETURNING *
@@ -161,6 +163,7 @@ export async function PUT(request: NextRequest) {
         value = COALESCE(${updates.value}, value),
         website = COALESCE(${updates.website}, website),
         image_url = COALESCE(${updates.imageUrl}, image_url),
+        video_url = COALESCE(${updates.videoUrl}, video_url),
         tags = COALESCE(${tagsJson}::jsonb, tags),
         is_featured = COALESCE(${updates.isFeatured}, is_featured),
         sort_order = COALESCE(${updates.sortOrder}, sort_order),

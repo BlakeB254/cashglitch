@@ -725,6 +725,22 @@ function ItemModal({
 
           <div>
             <label className="block text-sm font-tech text-primary/80 mb-1">
+              Video URL
+            </label>
+            <input
+              type="url"
+              value={form.videoUrl || ""}
+              onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
+              placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
+              className="w-full px-3 py-2 bg-primary/5 border border-primary/30 text-primary font-tech focus:outline-none focus:border-primary/60"
+            />
+            <p className="text-[10px] font-tech text-primary/20 mt-1">
+              Supports YouTube, Vimeo, Facebook, Instagram
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-tech text-primary/80 mb-1">
               Tags (comma-separated)
             </label>
             <input

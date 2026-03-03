@@ -28,6 +28,7 @@ function transformPageItem(row: PageItemRow): PageItem {
     value: row.value,
     website: row.website,
     imageUrl: row.image_url,
+    videoUrl: row.video_url,
     tags: parseTags(row.tags as unknown),
     isFeatured: row.is_featured,
     sortOrder: row.sort_order,
