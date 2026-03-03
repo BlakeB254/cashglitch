@@ -605,6 +605,7 @@ export async function initializePageItems() {
   `;
 
   await sql`ALTER TABLE page_items ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)`;
+  await sql`ALTER TABLE page_items ADD COLUMN IF NOT EXISTS video_url VARCHAR(500)`;
 }
 
 // Utility: Clean up expired tokens and sessions

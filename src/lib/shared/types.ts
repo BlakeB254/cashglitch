@@ -429,6 +429,7 @@ export interface PageItem {
   value: string | null;
   website: string | null;
   imageUrl: string | null;
+  videoUrl: string | null;
   tags: string[] | null;
   isFeatured: boolean;
   sortOrder: number;
@@ -448,6 +449,7 @@ export interface PageItemRow {
   value: string | null;
   website: string | null;
   image_url: string | null;
+  video_url: string | null;
   tags: string | null;
   is_featured: boolean;
   sort_order: number;
@@ -466,6 +468,7 @@ export interface CreatePageItemInput {
   value?: string;
   website?: string;
   imageUrl?: string;
+  videoUrl?: string;
   tags?: string[];
   isFeatured?: boolean;
   sortOrder?: number;
@@ -481,6 +484,7 @@ export interface UpdatePageItemInput {
   value?: string;
   website?: string;
   imageUrl?: string;
+  videoUrl?: string;
   tags?: string[];
   isFeatured?: boolean;
   sortOrder?: number;
