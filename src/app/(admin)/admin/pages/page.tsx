@@ -391,6 +391,7 @@ export default function PagesAdminPage() {
                 value: "",
                 website: "",
                 imageUrl: null,
+                videoUrl: null,
                 tags: [],
                 isFeatured: false,
                 sortOrder: currentItems.length,
