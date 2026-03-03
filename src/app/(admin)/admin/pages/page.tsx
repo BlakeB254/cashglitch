@@ -14,6 +14,7 @@ import {
   ChevronUp,
   Upload,
   X,
+  Play,
 } from "lucide-react";
 import type { PageContent, PageItem } from "@/lib/shared";
 import { PAGE_SLUGS, PAGE_LABELS, type PageSlug } from "@/lib/shared";
@@ -724,19 +725,20 @@ function ItemModal({
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-tech text-primary/80 mb-1">
-              Video URL
+          <div className="bg-primary/10 border border-primary/30 p-3 rounded space-y-2">
+            <label className="flex items-center gap-2 text-sm font-tech text-primary mb-1">
+              <Play className="w-4 h-4" />
+              Embedded Video URL
             </label>
             <input
               type="url"
               value={form.videoUrl || ""}
               onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
-              placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
+              placeholder="Paste a YouTube, Vimeo, Facebook, or Instagram link"
               className="w-full px-3 py-2 bg-primary/5 border border-primary/30 text-primary font-tech focus:outline-none focus:border-primary/60"
             />
-            <p className="text-[10px] font-tech text-primary/20 mt-1">
-              Supports YouTube, Vimeo, Facebook, Instagram
+            <p className="text-[10px] font-tech text-primary/40">
+              Video thumbnail will show on the card. Full video plays in the detail modal.
             </p>
           </div>
 
