@@ -80,6 +80,7 @@ export interface BlogPostRow {
   author_email: string;
   image_url: string | null;
   video_url: string | null;
+  image_focal_point: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -91,6 +92,7 @@ export interface CreateBlogPostInput {
   published?: boolean;
   imageUrl?: string;
   videoUrl?: string;
+  imageFocalPoint?: string;
 }
 
 export interface UpdateBlogPostInput {
@@ -100,6 +102,7 @@ export interface UpdateBlogPostInput {
   published?: boolean;
   imageUrl?: string;
   videoUrl?: string;
+  imageFocalPoint?: string;
 }
 
 // Category types (editable homepage items)

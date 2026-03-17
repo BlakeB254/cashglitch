@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, excerpt, published, imageUrl, videoUrl } = body;
+    const { title, content, excerpt, published, imageUrl, videoUrl, imageFocalPoint } = body;
 
     if (!title || !content) {
       return NextResponse.json(
@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
     const cleanedVideoUrl = videoUrl ? cleanVideoUrl(videoUrl) : null;
 
     const result = await sql`
-      INSERT INTO blog_posts (slug, title, content, excerpt, published, author_email, image_url, video_url)
-      VALUES (${slug}, ${title}, ${content}, ${excerpt || null}, ${published ?? false}, ${session.email}, ${imageUrl || null}, ${cleanedVideoUrl || null})
+      INSERT INTO blog_posts (slug, title, content, excerpt, published, author_email, image_url, video_url, image_focal_point)
+      VALUES (${slug}, ${title}, ${content}, ${excerpt || null}, ${published ?? false}, ${session.email}, ${imageUrl || null}, ${cleanedVideoUrl || null}, ${imageFocalPoint || null})
       RETURNING *
     ` as BlogPostRow[];
 
@@ -89,6 +89,7 @@ export async function PUT(request: NextRequest) {
     const hasExcerpt = "excerpt" in body;
     const hasImageUrl = "imageUrl" in body;
     const hasVideoUrl = "videoUrl" in body;
+    const hasImageFocalPoint = "imageFocalPoint" in body;
     const cleanedVideoUrl = hasVideoUrl && body.videoUrl ? cleanVideoUrl(body.videoUrl) : body.videoUrl ?? null;
 
     const result = await sql`
@@ -100,6 +101,7 @@ export async function PUT(request: NextRequest) {
         published = COALESCE(${published}, published),
         image_url = CASE WHEN ${hasImageUrl} THEN ${body.imageUrl ?? null} ELSE image_url END,
         video_url = CASE WHEN ${hasVideoUrl} THEN ${cleanedVideoUrl || null} ELSE video_url END,
+        image_focal_point = CASE WHEN ${hasImageFocalPoint} THEN ${body.imageFocalPoint ?? null} ELSE image_focal_point END,
         updated_at = NOW()
       WHERE id = ${id}
       RETURNING *

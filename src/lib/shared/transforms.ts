@@ -11,6 +11,7 @@ export function transformPost(row: BlogPostRow): BlogPost {
     authorEmail: row.author_email,
     imageUrl: row.image_url,
     videoUrl: row.video_url,
+    imageFocalPoint: row.image_focal_point,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
   };

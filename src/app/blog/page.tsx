@@ -78,7 +78,7 @@ export default function BlogPage() {
                   return (
                     <div className="relative w-full h-48 overflow-hidden">
                       {thumbnailSrc ? (
-                        <Image src={thumbnailSrc} alt={post.title} fill className="object-cover" />
+                        <Image src={thumbnailSrc} alt={post.title} fill className="object-cover" style={{ objectPosition: post.imageFocalPoint || "50% 50%" }} />
                       ) : (
                         <div className="w-full h-full bg-primary/10 flex items-center justify-center">
                           <Play className="w-12 h-12 text-primary/40" />

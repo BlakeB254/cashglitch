@@ -151,7 +151,7 @@ export default function BlogPostPage({
         {/* Hero Image (shown below video if both exist, or alone) */}
         {post.imageUrl && (
           <div className="relative w-full h-64 md:h-80 overflow-hidden mb-8 border border-primary/25 rounded-sm">
-            <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
+            <Image src={post.imageUrl} alt={post.title} fill className="object-cover" style={{ objectPosition: post.imageFocalPoint || "50% 50%" }} />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0f0a1a] via-[#0f0a1a]/20 to-transparent" />
           </div>
         )}

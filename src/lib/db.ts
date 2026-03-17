@@ -74,6 +74,7 @@ export async function initializeBlogPosts() {
 
   await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)`;
   await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS video_url VARCHAR(500)`;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_focal_point VARCHAR(50)`;
 }
 
 // Initialize site_settings table (key-value store)

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Save, Upload, X, Video, ImageIcon } from "lucide-react";
+import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Save, Upload, X, Video, ImageIcon, Crosshair } from "lucide-react";
 import type { BlogPost } from "@/lib/shared";
 import { cleanVideoUrl } from "@/lib/video";
 
@@ -20,6 +20,7 @@ export default function BlogPage() {
   const [formPublished, setFormPublished] = useState(false);
   const [formImageUrl, setFormImageUrl] = useState("");
   const [formVideoUrl, setFormVideoUrl] = useState("");
+  const [formFocalPoint, setFormFocalPoint] = useState("50% 50%");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,6 +53,7 @@ export default function BlogPage() {
       setFormPublished(post.published);
       setFormImageUrl(post.imageUrl || "");
       setFormVideoUrl(post.videoUrl ? cleanVideoUrl(post.videoUrl) : "");
+      setFormFocalPoint(post.imageFocalPoint || "50% 50%");
     } else {
       setEditingPost(null);
       setFormTitle("");
@@ -60,6 +62,7 @@ export default function BlogPage() {
       setFormPublished(false);
       setFormImageUrl("");
       setFormVideoUrl("");
+      setFormFocalPoint("50% 50%");
     }
     setUploadError(null);
     setIsEditorOpen(true);
@@ -123,6 +126,7 @@ export default function BlogPage() {
         published: formPublished,
         imageUrl: formImageUrl || null,
         videoUrl: formVideoUrl || null,
+        imageFocalPoint: formImageUrl ? formFocalPoint : null,
       };
       const body = editingPost ? { id: editingPost.id, ...fields } : fields;
 
@@ -222,6 +226,7 @@ export default function BlogPage() {
                       width={48}
                       height={48}
                       className="w-full h-full object-cover"
+                      style={{ objectPosition: post.imageFocalPoint || "50% 50%" }}
                     />
                   </div>
                 )}
@@ -315,20 +320,44 @@ export default function BlogPage() {
                   Featured Image
                 </label>
                 {formImageUrl ? (
-                  <div className="relative border border-primary/30 rounded overflow-hidden">
-                    <Image
-                      src={formImageUrl}
-                      alt="Blog post"
-                      width={720}
-                      height={200}
-                      className="w-full h-32 object-cover"
-                    />
-                    <button
-                      onClick={() => setFormImageUrl("")}
-                      className="absolute top-2 right-2 p-1 bg-black/60 rounded text-red-400 hover:text-red-300"
+                  <div className="space-y-2">
+                    <div
+                      className="relative border border-primary/30 rounded overflow-hidden cursor-crosshair"
+                      onClick={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const x = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+                        const y = Math.round(((e.clientY - rect.top) / rect.height) * 100);
+                        setFormFocalPoint(`${x}% ${y}%`);
+                      }}
                     >
-                      <X className="w-4 h-4" />
-                    </button>
+                      <Image
+                        src={formImageUrl}
+                        alt="Blog post"
+                        width={720}
+                        height={200}
+                        className="w-full h-32 object-cover"
+                        style={{ objectPosition: formFocalPoint }}
+                      />
+                      {/* Focal point indicator */}
+                      <div
+                        className="absolute w-5 h-5 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                        style={{
+                          left: formFocalPoint.split(" ")[0],
+                          top: formFocalPoint.split(" ")[1],
+                        }}
+                      >
+                        <Crosshair className="w-5 h-5 text-white drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]" />
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setFormImageUrl(""); }}
+                        className="absolute top-2 right-2 p-1 bg-black/60 rounded text-red-400 hover:text-red-300"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <p className="text-[10px] font-tech text-primary/30">
+                      Click image to set focal point ({formFocalPoint})
+                    </p>
                   </div>
                 ) : (
                   <div
