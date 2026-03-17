@@ -8,11 +8,64 @@ export interface VideoInfo {
 }
 
 /**
+ * Extract a clean video URL from pasted content that may contain
+ * iframe embed codes, script tags, or other HTML markup.
+ * Returns a plain URL string suitable for storage.
+ */
+export function cleanVideoUrl(input: string): string {
+  if (!input) return "";
+
+  const trimmed = input.trim();
+
+  // If it looks like a plain URL already, return it
+  if (/^https?:\/\/\S+$/i.test(trimmed) && !trimmed.includes("<")) {
+    return trimmed;
+  }
+
+  // Extract src from <iframe src="..."> embed codes
+  const iframeSrc = trimmed.match(/<iframe[^>]+src=["']([^"']+)["']/i);
+  if (iframeSrc) {
+    const src = iframeSrc[1];
+    // Convert embed URLs back to canonical watch/page URLs
+    const ytEmbed = src.match(/youtube\.com\/embed\/([\w-]{11})/);
+    if (ytEmbed) return `https://www.youtube.com/watch?v=${ytEmbed[1]}`;
+
+    const vimeoEmbed = src.match(/player\.vimeo\.com\/video\/(\d+)/);
+    if (vimeoEmbed) return `https://vimeo.com/${vimeoEmbed[1]}`;
+
+    const igEmbed = src.match(/instagram\.com\/p\/([\w-]+)\/embed/);
+    if (igEmbed) return `https://www.instagram.com/p/${igEmbed[1]}/`;
+
+    // Facebook plugin embeds have the real URL in the href param
+    const fbPlugin = src.match(/facebook\.com\/plugins\/video\.php\?href=([^&]+)/);
+    if (fbPlugin) return decodeURIComponent(fbPlugin[1]);
+
+    return src;
+  }
+
+  // Extract href from Facebook embed <div data-href="..."> blocks
+  const dataHref = trimmed.match(/data-href=["']([^"']+)["']/i);
+  if (dataHref) return dataHref[1];
+
+  // Extract any URL from the pasted content (strip surrounding HTML/script tags)
+  const anyUrl = trimmed.match(/(https?:\/\/[^\s"'<>]+)/i);
+  if (anyUrl) return anyUrl[1];
+
+  // Nothing recognizable — return the trimmed input as-is
+  return trimmed;
+}
+
+/**
  * Parse a video URL and return platform info, thumbnail URL, and embed URL.
  * Returns null if the URL is not a recognized video platform.
  */
 export function getVideoInfo(url: string): VideoInfo | null {
   if (!url) return null;
+
+  // Clean the URL first in case raw embed code was stored
+  const cleanUrl = cleanVideoUrl(url);
+  if (!cleanUrl) return null;
+  url = cleanUrl;
 
   // YouTube: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID, youtube.com/shorts/ID
   const ytMatch = url.match(
@@ -55,14 +108,14 @@ export function getVideoInfo(url: string): VideoInfo | null {
 
   // Instagram: instagram.com/reel/CODE, instagram.com/p/CODE, instagram.com/tv/CODE
   const igMatch = url.match(
-    /instagram\.com\/(?:reel|p|tv)\/([\w-]+)/
+    /instagram\.com\/(reel|p|tv)\/([\w-]+)/
   );
   if (igMatch) {
     return {
       platform: "instagram",
-      videoId: igMatch[1],
+      videoId: igMatch[2],
       thumbnailUrl: null,
-      embedUrl: `https://www.instagram.com/p/${igMatch[1]}/embed`,
+      embedUrl: `https://www.instagram.com/${igMatch[1]}/${igMatch[2]}/embed`,
     };
   }
 

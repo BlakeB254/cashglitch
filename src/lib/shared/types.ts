@@ -64,6 +64,7 @@ export interface BlogPost {
   published: boolean;
   authorEmail: string;
   imageUrl: string | null;
+  videoUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -77,6 +78,7 @@ export interface BlogPostRow {
   published: boolean;
   author_email: string;
   image_url: string | null;
+  video_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -87,6 +89,7 @@ export interface CreateBlogPostInput {
   excerpt?: string;
   published?: boolean;
   imageUrl?: string;
+  videoUrl?: string;
 }
 
 export interface UpdateBlogPostInput {
@@ -95,6 +98,7 @@ export interface UpdateBlogPostInput {
   excerpt?: string;
   published?: boolean;
   imageUrl?: string;
+  videoUrl?: string;
 }
 
 // Category types (editable homepage items)

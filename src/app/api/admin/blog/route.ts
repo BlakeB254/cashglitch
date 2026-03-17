@@ -1,22 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { sql, initializeBlogPosts } from "@/lib/db";
-import type { BlogPostRow, BlogPost } from "@/lib/shared";
-
-function transformPost(row: BlogPostRow): BlogPost {
-  return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    content: row.content,
-    excerpt: row.excerpt,
-    published: row.published,
-    authorEmail: row.author_email,
-    imageUrl: row.image_url,
-    createdAt: new Date(row.created_at),
-    updatedAt: new Date(row.updated_at),
-  };
-}
+import { transformPost } from "@/lib/shared";
+import type { BlogPostRow } from "@/lib/shared";
+import { cleanVideoUrl } from "@/lib/video";
 
 function generateSlug(title: string): string {
   return title
@@ -53,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, excerpt, published, imageUrl } = body;
+    const { title, content, excerpt, published, imageUrl, videoUrl } = body;
 
     if (!title || !content) {
       return NextResponse.json(
@@ -66,9 +53,11 @@ export async function POST(request: NextRequest) {
 
     const slug = generateSlug(title);
 
+    const cleanedVideoUrl = videoUrl ? cleanVideoUrl(videoUrl) : null;
+
     const result = await sql`
-      INSERT INTO blog_posts (slug, title, content, excerpt, published, author_email, image_url)
-      VALUES (${slug}, ${title}, ${content}, ${excerpt || null}, ${published ?? false}, ${session.email}, ${imageUrl || null})
+      INSERT INTO blog_posts (slug, title, content, excerpt, published, author_email, image_url, video_url)
+      VALUES (${slug}, ${title}, ${content}, ${excerpt || null}, ${published ?? false}, ${session.email}, ${imageUrl || null}, ${cleanedVideoUrl || null})
       RETURNING *
     ` as BlogPostRow[];
 
@@ -87,7 +76,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, title, content, excerpt, published, imageUrl } = body;
+    const { id, title, content, published } = body;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -96,14 +85,21 @@ export async function PUT(request: NextRequest) {
     // Regenerate slug if title changed
     const slug = title ? generateSlug(title) : undefined;
 
+    // For nullable fields, distinguish "not sent" (keep old) from "sent as null" (clear)
+    const hasExcerpt = "excerpt" in body;
+    const hasImageUrl = "imageUrl" in body;
+    const hasVideoUrl = "videoUrl" in body;
+    const cleanedVideoUrl = hasVideoUrl && body.videoUrl ? cleanVideoUrl(body.videoUrl) : body.videoUrl ?? null;
+
     const result = await sql`
       UPDATE blog_posts SET
         slug = COALESCE(${slug}, slug),
         title = COALESCE(${title}, title),
         content = COALESCE(${content}, content),
-        excerpt = COALESCE(${excerpt}, excerpt),
+        excerpt = CASE WHEN ${hasExcerpt} THEN ${body.excerpt ?? null} ELSE excerpt END,
         published = COALESCE(${published}, published),
-        image_url = COALESCE(${imageUrl}, image_url),
+        image_url = CASE WHEN ${hasImageUrl} THEN ${body.imageUrl ?? null} ELSE image_url END,
+        video_url = CASE WHEN ${hasVideoUrl} THEN ${cleanedVideoUrl || null} ELSE video_url END,
         updated_at = NOW()
       WHERE id = ${id}
       RETURNING *

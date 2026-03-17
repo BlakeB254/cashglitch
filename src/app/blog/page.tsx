@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Loader2, Play } from "lucide-react";
 import type { BlogPost } from "@/lib/shared";
+import { getVideoThumbnail } from "@/lib/video";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -72,12 +73,28 @@ export default function BlogPage() {
                 href={`/blog/${post.slug}`}
                 className="block bg-primary/10 border border-primary/25 hover:border-primary/50 transition-all group overflow-hidden hover:shadow-lg hover:shadow-primary/10"
               >
-                {post.imageUrl && (
-                  <div className="relative w-full h-48 overflow-hidden">
-                    <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f0a1a] via-transparent to-transparent opacity-60" />
-                  </div>
-                )}
+                {(post.imageUrl || post.videoUrl) && (() => {
+                  const thumbnailSrc = post.imageUrl || getVideoThumbnail(post.videoUrl, null);
+                  return (
+                    <div className="relative w-full h-48 overflow-hidden">
+                      {thumbnailSrc ? (
+                        <Image src={thumbnailSrc} alt={post.title} fill className="object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                          <Play className="w-12 h-12 text-primary/40" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0f0a1a] via-transparent to-transparent opacity-60" />
+                      {post.videoUrl && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-full bg-black/60 border border-primary/40 flex items-center justify-center">
+                            <Play className="w-5 h-5 text-primary ml-0.5" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
                 <div className="p-6">
                 <h2 className="text-xl font-tech text-primary group-hover:text-glow mb-2">
                   {post.title}

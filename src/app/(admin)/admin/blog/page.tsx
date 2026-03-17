@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Save, Upload, X } from "lucide-react";
+import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Save, Upload, X, Video, ImageIcon } from "lucide-react";
 import type { BlogPost } from "@/lib/shared";
+import { cleanVideoUrl } from "@/lib/video";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -18,6 +19,7 @@ export default function BlogPage() {
   const [formExcerpt, setFormExcerpt] = useState("");
   const [formPublished, setFormPublished] = useState(false);
   const [formImageUrl, setFormImageUrl] = useState("");
+  const [formVideoUrl, setFormVideoUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -49,6 +51,7 @@ export default function BlogPage() {
       setFormExcerpt(post.excerpt || "");
       setFormPublished(post.published);
       setFormImageUrl(post.imageUrl || "");
+      setFormVideoUrl(post.videoUrl ? cleanVideoUrl(post.videoUrl) : "");
     } else {
       setEditingPost(null);
       setFormTitle("");
@@ -56,6 +59,7 @@ export default function BlogPage() {
       setFormExcerpt("");
       setFormPublished(false);
       setFormImageUrl("");
+      setFormVideoUrl("");
     }
     setUploadError(null);
     setIsEditorOpen(true);
@@ -112,22 +116,15 @@ export default function BlogPage() {
     setIsSaving(true);
     try {
       const method = editingPost ? "PUT" : "POST";
-      const body = editingPost
-        ? {
-            id: editingPost.id,
-            title: formTitle,
-            content: formContent,
-            excerpt: formExcerpt || null,
-            published: formPublished,
-            imageUrl: formImageUrl || null,
-          }
-        : {
-            title: formTitle,
-            content: formContent,
-            excerpt: formExcerpt || null,
-            published: formPublished,
-            imageUrl: formImageUrl || null,
-          };
+      const fields = {
+        title: formTitle,
+        content: formContent,
+        excerpt: formExcerpt || null,
+        published: formPublished,
+        imageUrl: formImageUrl || null,
+        videoUrl: formVideoUrl || null,
+      };
+      const body = editingPost ? { id: editingPost.id, ...fields } : fields;
 
       const res = await fetch("/api/admin/blog", {
         method,
@@ -241,8 +238,10 @@ export default function BlogPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-primary/60 mt-1 truncate">
-                    /{post.slug} | {new Date(post.createdAt).toLocaleDateString()}
+                  <p className="text-xs text-primary/60 mt-1 truncate flex items-center gap-2">
+                    <span>/{post.slug} | {new Date(post.createdAt).toLocaleDateString()}</span>
+                    {post.imageUrl && <span title="Has image"><ImageIcon className="w-3 h-3 text-blue-400 flex-shrink-0" /></span>}
+                    {post.videoUrl && <span title="Has video"><Video className="w-3 h-3 text-purple-400 flex-shrink-0" /></span>}
                   </p>
                 </div>
               </div>
@@ -365,6 +364,28 @@ export default function BlogPage() {
                     {uploadError}
                   </p>
                 )}
+              </div>
+
+              {/* Video URL */}
+              <div>
+                <label className="block text-sm font-tech text-primary/80 mb-1">
+                  Video URL
+                </label>
+                <input
+                  type="text"
+                  value={formVideoUrl}
+                  onChange={(e) => setFormVideoUrl(cleanVideoUrl(e.target.value))}
+                  onPaste={(e) => {
+                    e.preventDefault();
+                    const pasted = e.clipboardData.getData("text");
+                    setFormVideoUrl(cleanVideoUrl(pasted));
+                  }}
+                  placeholder="Paste any video link or embed code"
+                  className="w-full px-4 py-2 bg-primary/5 border border-primary/30 text-primary font-tech placeholder:text-primary/30 focus:outline-none focus:border-primary/60"
+                />
+                <p className="text-[10px] font-tech text-primary/30 mt-1">
+                  YouTube, Vimeo, Facebook, Instagram — paste a link or embed code, we&apos;ll extract the URL
+                </p>
               </div>
 
               <div>

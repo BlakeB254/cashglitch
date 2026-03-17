@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Loader2, Trophy, Ticket, Clock, Calendar } from "lucide-react";
+import { ExternalLink, Loader2, Trophy, Ticket, Clock, Calendar, Play } from "lucide-react";
 import { DynamicIcon } from "@/components/DynamicIcon";
 import { DonateButton } from "@/components/DonateButton";
 import type { Category, SiteSettings, Sweepstake, BlogPost } from "@/lib/shared";
+import { getVideoThumbnail } from "@/lib/video";
 
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -207,20 +208,35 @@ export default function Home() {
               // LATEST POSTS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {blogPosts.slice(0, 3).map((post) => (
+              {blogPosts.slice(0, 3).map((post) => {
+                const thumbnail = post.imageUrl || getVideoThumbnail(post.videoUrl, null);
+                return (
                 <Link
                   key={post.id}
                   href={`/blog/${post.slug}`}
                   className="card-matrix p-0 overflow-hidden group"
                 >
-                  {post.imageUrl && (
+                  {(thumbnail || post.videoUrl) && (
                     <div className="relative w-full h-32 overflow-hidden">
-                      <Image
-                        src={post.imageUrl}
-                        alt={post.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      {thumbnail ? (
+                        <Image
+                          src={thumbnail}
+                          alt={post.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                          <Play className="w-10 h-10 text-primary/40" />
+                        </div>
+                      )}
+                      {post.videoUrl && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full bg-black/60 border border-primary/40 flex items-center justify-center">
+                            <Play className="w-4 h-4 text-primary ml-0.5" />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                   <div className="p-4">
@@ -238,7 +254,8 @@ export default function Home() {
                     </div>
                   </div>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -253,9 +270,37 @@ export default function Home() {
           <p>&gt; SYSTEM STATUS: OPERATIONAL</p>
           <p>&gt; ABUNDANCE MATRIX: ACTIVE</p>
           <p>&gt; RESOURCE GLITCH DETECTED IN SECTOR 7G</p>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <div className="flex items-center gap-6">
+              {settings?.twitterUrl && (
+                <a
+                  href={settings.twitterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary hover:text-white transition-colors text-sm font-tech tracking-wider"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                  TWITTER
+                </a>
+              )}
+              {settings?.instagramUrl && (
+                <a
+                  href={settings.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary hover:text-white transition-colors text-sm font-tech tracking-wider"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                  </svg>
+                  INSTAGRAM
+                </a>
+              )}
+            </div>
             <a
-              href={settings?.twitterUrl || "https://twitter.com"}
+              href={settings?.twitterUrl || settings?.instagramUrl || "#"}
               target="_blank"
               rel="noopener noreferrer"
               className="glitch-text-link inline-flex items-center gap-2 text-primary hover:text-white transition-colors text-lg font-matrix tracking-wider"

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, useMemo, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
 import type { BlogPost } from "@/lib/shared";
+import { getVideoInfo } from "@/lib/video";
 
 // Simple markdown-to-HTML converter for basic formatting
 function renderMarkdown(content: string): string {
@@ -14,6 +15,11 @@ function renderMarkdown(content: string): string {
     .replace(/^### (.*$)/gim, '<h3 class="text-lg font-tech text-primary mt-6 mb-2">$1</h3>')
     .replace(/^## (.*$)/gim, '<h2 class="text-xl font-tech text-primary mt-8 mb-3">$1</h2>')
     .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-matrix text-primary text-glow mt-8 mb-4">$1</h1>')
+    // Images (markdown syntax: ![alt](url))
+    .replace(
+      /!\[([^\]]*)\]\(([^)]+)\)/gim,
+      '<img src="$2" alt="$1" class="w-full max-w-2xl mx-auto my-6 rounded border border-primary/20" />'
+    )
     // Bold and italic
     .replace(/\*\*\*(.*?)\*\*\*/gim, '<strong class="italic">$1</strong>')
     .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
@@ -44,8 +50,8 @@ function renderMarkdown(content: string): string {
 
   // Sanitize the HTML output to prevent XSS
   return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'br', 'strong', 'em', 'a', 'pre', 'code', 'ul', 'li', 'blockquote'],
-    ALLOWED_ATTR: ['href', 'class', 'target', 'rel'],
+    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'br', 'strong', 'em', 'a', 'pre', 'code', 'ul', 'li', 'blockquote', 'img'],
+    ALLOWED_ATTR: ['href', 'class', 'target', 'rel', 'src', 'alt'],
   });
 }
 
@@ -109,6 +115,10 @@ export default function BlogPostPage({
   }
 
   const sanitizedContent = renderMarkdown(post.content);
+  const videoInfo = useMemo(
+    () => (post.videoUrl ? getVideoInfo(post.videoUrl) : null),
+    [post.videoUrl]
+  );
 
   return (
     <div className="min-h-screen text-primary relative">
@@ -125,7 +135,20 @@ export default function BlogPostPage({
           Back to Blog
         </Link>
 
-        {/* Hero Image */}
+        {/* Featured Video */}
+        {videoInfo && (
+          <div className="relative w-full aspect-video overflow-hidden mb-8 border border-primary/25 rounded-sm">
+            <iframe
+              src={videoInfo.embedUrl}
+              title={post.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+        )}
+
+        {/* Hero Image (shown below video if both exist, or alone) */}
         {post.imageUrl && (
           <div className="relative w-full h-64 md:h-80 overflow-hidden mb-8 border border-primary/25 rounded-sm">
             <Image src={post.imageUrl} alt={post.title} fill className="object-cover" />
