@@ -65,6 +65,7 @@ export interface BlogPost {
   authorEmail: string;
   imageUrl: string | null;
   videoUrl: string | null;
+  imageFocalPoint: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
